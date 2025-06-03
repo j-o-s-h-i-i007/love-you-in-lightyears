@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> <title>Love You in Lightyears</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Love You in Lightyears</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="importmap">
         {
@@ -13,7 +14,7 @@
         }
     </script>
     <style>
-        body { margin: 0; overflow: hidden; font-family: 'Inter', sans-serif; background-color: #000011; color: #fff; -webkit-tap-highlight-color: transparent; /* Prevent tap highlight on mobile */ }
+        body { margin: 0; overflow: hidden; font-family: 'Inter', sans-serif; background-color: #000011; color: #fff; -webkit-tap-highlight-color: transparent; }
         .view { width: 100vw; height: 100vh; position: fixed; top: 0; left: 0; display: none; }
         #homepage-view {
             display: flex;
@@ -27,17 +28,7 @@
         }
         #homepage-view h1 { font-size: clamp(2.5em, 8vw, 3.5em); margin-bottom: 20px; color: #E0E7FF; text-shadow: 0 0 15px #C7D2FE, 0 0 25px #A5B4FC; }
         #homepage-view p { font-size: clamp(1em, 4vw, 1.2em); margin-bottom: 30px; color: #A5B4FC; max-width: 600px; }
-        #daily-celestial-thought {
-            font-size: clamp(0.9em, 3.5vw, 1.1em);
-            font-style: italic;
-            color: #C7D2FE;
-            margin: 20px auto 30px;
-            padding: 15px;
-            max-width: 500px;
-            border: 1px dashed rgba(165, 180, 252, 0.5);
-            border-radius: 8px;
-            background-color: rgba(255,255,255,0.05);
-        }
+        /* Removed #daily-celestial-thought style */
         #homepage-view .contact-info { font-size: clamp(1em, 3.8vw, 1.1em); margin-bottom: 40px; color: #C7D2FE; }
         #homepage-view .contact-info a { color: #87CEFA; text-decoration: underline; }
         #enter-solar-system-btn {
@@ -56,12 +47,10 @@
             font-size: 0.75em;
             color: rgba(200, 200, 255, 0.6);
         }
-        #admin-login-section { margin-top: 30px; padding:15px; background-color:rgba(0,0,30,0.5); border-radius:8px; }
-        #admin-login-section input { color: #333; margin: 5px; padding: 8px; border-radius: 4px; border: 1px solid #ccc;}
-        #admin-login-section button { background-color: #673AB7; color:white; padding: 8px 15px; border-radius:4px; }
+        /* Removed #admin-login-section styles */
 
         #solarsystem-view { }
-        #canvas-container { width: 100%; height: 100%; position: absolute; cursor: grab; touch-action: none; /* Prevent default touch actions like scrolling/zooming on canvas */ }
+        #canvas-container { width: 100%; height: 100%; position: absolute; cursor: grab; touch-action: none; }
         #canvas-container:active { cursor: grabbing; }
 
         #back-to-homepage-btn {
@@ -70,7 +59,7 @@
             left: 10px; 
             z-index: 30; 
             padding: 8px 12px; 
-            background-color: rgba(96, 125, 139, 0.8); /* Slightly transparent */
+            background-color: rgba(96, 125, 139, 0.8);
             backdrop-filter: blur(5px);
             color: white; 
             border: none; 
@@ -79,7 +68,6 @@
             font-size: 0.9em;
         }
          #back-to-homepage-btn:hover { background-color: rgba(76, 105, 119, 0.9); }
-
 
         #search-bar-container {
             position: fixed; top: 10px; left: 50%; transform: translateX(-50%);
@@ -119,45 +107,29 @@
 
         #info-panel h3 { text-align: center; margin-bottom: 15px; font-size: 1.4em;}
         #info-panel h4 { font-size: 1.1em; color: #87CEFA; margin-top:10px; margin-bottom:5px; }
-        #info-panel label { display: block; margin-top: 10px; font-size: 0.9em; color: #aaa; }
-        #info-panel input, #info-panel textarea, #info-panel select {
-            width: 100%; padding: 8px; margin-top: 5px; border-radius: 6px;
-            background-color: rgba(255, 255, 255, 0.1); border: 1px solid rgba(100, 100, 200, 0.3); color: #fff;
-        }
-        #info-panel select option { background-color: #000011; color: #fff; }
-        #info-panel input[type="color"] { padding: 0; height: 40px; }
-        #info-panel button {
+        /* Removed styles specific to edit fields if any */
+        #info-panel button { /* General style for close button */
             background-color: #4A90E2; color: white; padding: 10px 15px; border: none;
             border-radius: 6px; cursor: pointer; margin-top: 15px; transition: background-color 0.3s;
+            width: 100%; /* Make close button full width */
         }
         #info-panel button:hover { background-color: #357ABD; }
         
-        #save-star-btn { width: calc(50% - 5px); }
-        #close-panel-btn { background-color: #E94E77; width: calc(50% - 5px); }
+        #close-panel-btn { background-color: #E94E77; } /* Keep close button style */
         #close-panel-btn:hover { background-color: #D33A60; }
 
-        .gemini-feature-btn {
-            background-color: #673AB7; display: block; width: 100%; margin-top: 10px;
-        }
-        .gemini-feature-btn:hover { background-color: #512DA8; }
-        .loading-gemini { font-size: 0.8em; color: #aaa; margin-left: 10px; display: inline-block;}
-
-        .star-image-input-group { margin-bottom: 5px; }
-        .star-image-preview-container img, #view-star-photo-container img {
+        .star-image-preview-container img, #view-star-photo-container img { /* Combined for view */
             max-width: 100%; height: auto; max-height: 100px; object-fit: cover;
             margin-top: 5px; border-radius: 4px; border: 1px solid rgba(100,100,200,0.2);
             display: block; 
         }
         #view-star-photo-container { display: flex; flex-direction: column; gap: 5px; margin-top: 10px;}
 
-
         #planet-summary-display { font-size: 0.95em; line-height: 1.5; color: #ddd; margin-top: 5px; }
-        #gemini-planet-response-area { margin-top:15px; padding:10px; background-color: rgba(255,255,255,0.05); border-radius:6px; font-size:0.9em; line-height:1.4; max-height: 200px; overflow-y: auto;}
-        .button-container { display: flex; justify-content: space-between; margin-top: 20px; }
+        /* Removed Gemini related styles */
+        .button-container { display: flex; justify-content: center; margin-top: 20px; } /* Center the close button */
 
-        #user-info { position: fixed; bottom: 10px; left: 10px; background-color: rgba(0,0,0,0.5); padding: 8px 12px; border-radius: 6px; font-size: 0.9em; z-index: 5; }
-        #admin-controls { position: fixed; bottom: 10px; right: 10px; z-index: 25; }
-        #admin-controls button { font-size: 0.8em; padding: 5px 10px; background-color: #777; color:white; border-radius:4px; }
+        /* Removed #user-info and #admin-controls styles */
 
         #message-box { position: fixed; bottom: 10px; right: 10px; background-color: rgba(74, 144, 226, 0.9); color: white; padding: 10px 15px; border-radius: 6px; z-index: 100; opacity: 0; transition: opacity 0.5s; font-size: 0.9em; }
         #message-box.visible { opacity: 1; }
@@ -169,17 +141,11 @@
     <div id="homepage-view" class="view" style="display: flex;">
         <h1>Love You in Lightyears</h1>
         <p>Explore a galaxy of named stars, each a unique tribute. Discover celestial memorials and the stories they hold.</p>
-        <div id="daily-celestial-thought">Loading a thought from the cosmos...</div>
         <div class="contact-info">
             Want to name a star after you or a loved one? <br/>
             Contact me: <a href="#" id="contact-link-placeholder">[Your IG/WhatsApp/Email Here]</a>
         </div>
         <button id="enter-solar-system-btn">Enter Solar System</button>
-        <div id="admin-login-section">
-            <input type="email" id="admin-email" placeholder="Admin Email">
-            <input type="password" id="admin-password" placeholder="Admin Password">
-            <button id="admin-login-btn">Admin Login</button>
-        </div>
         <div id="homepage-credit">Designed by Josh and Gemini AI</div>
     </div>
 
@@ -200,38 +166,6 @@
                  <strong>Coords:</strong> <span id="object-coords-display">N/A</span>
             </div>
 
-            <div id="star-edit-fields" style="display:none;">
-                <h4>Edit Star</h4>
-                <label for="star-name">Name:</label>
-                <input type="text" id="star-name" placeholder="Enter star name">
-                <label for="star-category">Category:</label>
-                <select id="star-category">
-                    <option value="general">General Memorial</option>
-                    <option value="pet">Pet Memorial</option>
-                    <option value="couple">Couple Tribute</option>
-                    <option value="milestone">Personal Milestone</option>
-                    <option value="other">Other</option>
-                </select>
-                <label for="star-color">Color:</label>
-                <input type="color" id="star-color" value="#FFFFFF">
-                
-                <label>Photo URLs (up to 5):</label>
-                <div id="star-image-inputs-container">
-                    <div class="star-image-input-group"><input type="text" id="star-photo-url-1" placeholder="Image URL 1"></div>
-                    <div class="star-image-input-group"><input type="text" id="star-photo-url-2" placeholder="Image URL 2 (optional)"></div>
-                    <div class="star-image-input-group"><input type="text" id="star-photo-url-3" placeholder="Image URL 3 (optional)"></div>
-                    <div class="star-image-input-group"><input type="text" id="star-photo-url-4" placeholder="Image URL 4 (optional)"></div>
-                    <div class="star-image-input-group"><input type="text" id="star-photo-url-5" placeholder="Image URL 5 (optional)"></div>
-                </div>
-                <div id="star-image-preview-container" class="star-image-preview-container"></div>
-
-
-                <label for="star-description">Description:</label>
-                <textarea id="star-description" rows="3" placeholder="A short message or description..."></textarea>
-                <button id="weave-star-story-btn" class="gemini-feature-btn">✨ Weave Star Story</button>
-                <span id="weave-story-loading" class="loading-gemini" style="display:none;">Weaving...</span>
-            </div>
-
             <div id="star-view-fields" style="display:none;">
                 <h4>Star Information</h4>
                 <div><strong>Name:</strong> <span id="view-star-name"></span></div>
@@ -244,24 +178,13 @@
                 <h4>Planet Information</h4>
                 <div><strong>Name:</strong> <span id="planet-name-display"></span></div>
                 <p id="planet-summary-display"></p>
-                <hr class="my-3 border-gray-600">
-                <h5>✨ Ask Gemini About <span id="gemini-planet-name"></span></h5>
-                <input type="text" id="gemini-planet-question" placeholder="Ask a question..." class="mt-1">
-                <button id="ask-gemini-planet-btn" class="gemini-feature-btn">Ask Gemini</button>
-                <span id="ask-planet-loading" class="loading-gemini" style="display:none;">Asking...</span>
-                <div id="gemini-planet-response-area" style="display:none;"></div>
-            </div>
+                </div>
             
             <div class="button-container">
-                <button id="save-star-btn" style="display:none;">Save Changes</button>
                 <button id="close-panel-btn">Close</button>
             </div>
         </div>
-        <div id="user-info">User ID: <span id="user-id-display"></span> (<span id="user-mode-display">User</span>)</div>
-        <div id="admin-controls" style="display:none;">
-             <button id="admin-logout-btn">Admin Logout</button>
         </div>
-    </div>
 
     <div id="loading-indicator" style="display:none;">Loading Solar System...</div>
     <div id="message-box"></div>
@@ -269,79 +192,84 @@
     <script type="module">
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { 
-            getAuth, 
-            signInAnonymously, 
-            onAuthStateChanged, 
-            setPersistence, 
-            browserLocalPersistence,
-            signInWithEmailAndPassword,
-            signOut 
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, serverTimestamp, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        // Firebase SDK imports are removed as they are no longer needed for stars/admin
+
+        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // + EDIT YOUR STAR DATA HERE                                         +
+        // + Each object in this array represents a star.                     +
+        // + - id: A unique identifier for the star (e.g., 'star_1', 'my_star') +
+        // + - name: The name of the star to be displayed.                    +
+        // + - category: 'general', 'pet', 'couple', 'milestone', 'other'.    +
+        // + - color: The hex color code for the star (e.g., '#FFD700').      +
+        // + - photoUrls: An array of image URLs (up to 5). Empty if no photos.+
+        // +              e.g., ['https://example.com/image1.jpg']           +
+        // + - description: A short message or story about the star.          +
+        // + - position: An object with x, y, z coordinates for the star.     +
+        // +             Adjust these values to place your stars in the sky.  +
+        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        const staticStarData = [
+            { id: 'star_1', name: 'The First Light', category: 'milestone', color: '#FFD700', photoUrls: [], description: 'Commemorating a new beginning.', position: { x: 100, y: 200, z: -150 } },
+            { id: 'star_2', name: 'Starlight Memories', category: 'general', color: '#A7C7E7', photoUrls: [], description: 'Remembering the good times.', position: { x: -150, y: 100, z: 200 } },
+            { id: 'star_3', name: 'Cosmic Love', category: 'couple', color: '#FFB6C1', photoUrls: [], description: 'A tribute to eternal love.', position: { x: 200, y: -50, z: 100 } },
+            { id: 'star_4', name: 'Paw Print Nebula', category: 'pet', color: '#98FB98', photoUrls: [], description: 'For a furry friend who crossed the rainbow bridge.', position: { x: -50, y: -150, z: -200 } },
+            { id: 'star_5', name: 'Journey\'s Star', category: 'milestone', color: '#E6E6FA', photoUrls: [], description: 'Marking a significant achievement.', position: { x: 300, y: 0, z: 0 } },
+            // Add more stars here up to 30 (or more if you wish)
+            // Example of a star with photos:
+            // { 
+            //   id: 'star_6', name: 'Galaxy Guardian', category: 'other', color: '#FF6347', 
+            //   photoUrls: ['https://via.placeholder.com/100/FF6347/FFFFFF?Text=StarPic1', 'https://via.placeholder.com/100/FF6347/FFFFFF?Text=StarPic2'], 
+            //   description: 'A protector of dreams.', position: { x: 0, y: 300, z: 50 } 
+            // },
+            // To make it 30 stars, you'll need to add 25 more entries like the ones above,
+            // adjusting their names, categories, colors, descriptions, and positions.
+            // For unique positions, try varying x, y, and z values between roughly -2000 and 2000.
+            // Keep some distance between stars to avoid overlap.
+            { id: 'star_6', name: 'Orion\'s Belt Buckle', category: 'other', color: '#FF6347', photoUrls: [], description: 'The flashiest part of the hunter.', position: { x: 0, y: 300, z: 50 } },
+            { id: 'star_7', name: 'Sirius B\'s Buddy', category: 'general', color: '#ADD8E6', photoUrls: [], description: 'A companion to the Dog Star.', position: { x: 400, y: 100, z: -100 } },
+            { id: 'star_8', name: 'Andromeda\'s Tear', category: 'milestone', color: '#E0BBE4', photoUrls: [], description: 'A distant wish, now achieved.', position: { x: -300, y: 250, z: 150 } },
+            { id: 'star_9', name: 'The Little Dipper\'s Handle', category: 'other', color: '#F0E68C', photoUrls: [], description: 'Guiding light for small scoops.', position: { x: 150, y: -200, z: -50 } },
+            { id: 'star_10', name: 'Venus\'s Valentine', category: 'couple', color: '#FFC0CB', photoUrls: [], description: 'Love brighter than the morning star.', position: { x: -250, y: -50, z: 300 } },
+            { id: 'star_11', name: 'Comet Tail Sparkle', category: 'general', color: '#B0E0E6', photoUrls: [], description: 'A fleeting moment of brilliance.', position: { x: 500, y: 50, z: -250 } },
+            { id: 'star_12', name: 'Jupiter\'s Gem', category: 'milestone', color: '#FFE4B5', photoUrls: [], description: 'A great red achievement.', position: { x: -450, y: 150, z: 0 } },
+            { id: 'star_13', name: 'Saturn\'s Ringlet', category: 'other', color: '#D2B48C', photoUrls: [], description: 'A tiny piece of a grand design.', position: { x: 100, y: 400, z: 100 } },
+            { id: 'star_14', name: 'Neptune\'s Trident Tip', category: 'general', color: '#4682B4', photoUrls: [], description: 'Piercing the cosmic ocean.', position: { x: -50, y: -300, z: -150 } },
+            { id: 'star_15', name: 'Pluto\'s Pal', category: 'pet', color: '#A9A9A9', photoUrls: [], description: 'A distant but cherished friend.', position: { x: 350, y: -100, z: 250 } },
+            { id: 'star_16', name: 'Celestial Beacon', category: 'general', color: '#FFFFE0', description: 'Guiding light through the cosmos.', position: { x: 600, y: 200, z: -50 } },
+            { id: 'star_17', name: 'Dream Weaver', category: 'milestone', color: '#DDA0DD', description: 'Where aspirations take flight.', position: { x: -550, y: 0, z: 150 } },
+            { id: 'star_18', name: 'Eternal Flame', category: 'couple', color: '#FF4500', description: 'A love that burns forever.', position: { x: 250, y: 350, z: 0 } },
+            { id: 'star_19', name: 'Silent Watcher', category: 'other', color: '#778899', description: 'Observing the universe unfold.', position: { x: -100, y: -400, z: -100 } },
+            { id: 'star_20', name: 'Feline Galaxy', category: 'pet', color: '#FFA07A', description: 'For all the purrs that echo in space.', position: { x: 450, y: -150, z: 200 } },
+            { id: 'star_21', name: 'Nova Hope', category: 'milestone', color: '#87CEEB', description: 'A burst of new possibilities.', position: { x: 0, y: 500, z: -200 } },
+            { id: 'star_22', name: 'Twin Souls', category: 'couple', color: '#EE82EE', description: 'Two stars, one destiny.', position: { x: -350, y: 300, z: 100 } },
+            { id: 'star_23', name: 'Guiding Paw', category: 'pet', color: '#90EE90', description: 'Always leading the way.', position: { x: 200, y: -250, z: -150 } },
+            { id: 'star_24', name: 'Achievement Crest', category: 'milestone', color: '#F0E68C', description: 'A pinnacle of success.', position: { x: -400, y: -100, z: 50 } },
+            { id: 'star_25', name: 'Mystery Orb', category: 'other', color: '#4B0082', description: 'An enigma wrapped in starlight.', position: { x: 150, y: 450, z: -250 } },
+            { id: 'star_26', name: 'Nebula Nook', category: 'general', color: '#BA55D3', description: 'A cozy corner in the cosmos.', position: { x: -200, y: 50, z: 350 } },
+            { id: 'star_27', name: 'Stardust Sprinter', category: 'milestone', color: '#00FA9A', description: 'Racing towards a brilliant future.', position: { x: 700, y: 0, z: 0 } },
+            { id: 'star_28', name: 'Cosmic Embrace', category: 'couple', color: '#FF69B4', description: 'Held together by gravity and love.', position: { x: -600, y: 200, z: -100 } },
+            { id: 'star_29', name: 'Whisker Way', category: 'pet', color: '#FFDAB9', description: 'A trail of happy meows.', position: { x: 300, y: -300, z: 150 } },
+            { id: 'star_30', name: 'The Final Frontier Star', category: 'other', color: '#FFFFFF', description: 'Boldly shining where no one has shone before.', position: { x: 0, y: 0, z: 500 } },
+        ];
+        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // + END OF STAR DATA EDITING SECTION                                 +
+        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
         document.addEventListener('DOMContentLoaded', async () => {
-            const firebaseConfigFromUser = {
-                apiKey: "AIzaSyDxNAcZ_q9R-TDOkmYOratPzYK-sK5PCB4", // Sensitive data, manage securely
-                authDomain: "love-you-in-lightyears.firebaseapp.com",
-                projectId: "love-you-in-lightyears",
-                storageBucket: "love-you-in-lightyears.appspot.com", 
-                messagingSenderId: "682979494336",
-                appId: "1:682979494336:web:340c2f2ad0662d5dc0a025",
-                measurementId: "G-PNHZTR1HL0"
-            };
-            
-            const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : firebaseConfigFromUser;
-            const appIdPath = typeof __app_id !== 'undefined' ? __app_id : 'love-you-lightyears-prod'; 
-            
-            const ADMIN_UID = "qdoYG8voQWhCCMPWipwlGxXsa6A2"; 
-
-            let app, auth, db;
-            let userId = null;
-            let isAuthReady = false;
-            let isAdmin = false;
-            let isSceneReady = false; 
-
             // --- DOM Element Variables ---
             const homepageView = document.getElementById('homepage-view');
-            const dailyCelestialThoughtEl = document.getElementById('daily-celestial-thought');
             const solarsystemView = document.getElementById('solarsystem-view');
             const enterSolarSystemBtn = document.getElementById('enter-solar-system-btn');
-            const backToHomepageBtn = document.getElementById('back-to-homepage-btn'); // New button
-            const adminLoginSection = document.getElementById('admin-login-section');
-            const adminEmailInput = document.getElementById('admin-email');
-            const adminPasswordInput = document.getElementById('admin-password');
-            const adminLoginBtn = document.getElementById('admin-login-btn');
-            const adminControls = document.getElementById('admin-controls');
-            const adminLogoutBtn = document.getElementById('admin-logout-btn');
+            const backToHomepageBtn = document.getElementById('back-to-homepage-btn'); 
             const searchBarContainer = document.getElementById('search-bar-container'); 
 
             const loadingIndicator = document.getElementById('loading-indicator');
             const canvasContainer = document.getElementById('canvas-container');
             const infoPanel = document.getElementById('info-panel');
             const panelTitle = document.getElementById('panel-title');
-            const objectIdDisplayContainer = document.getElementById('object-id-display-container');
             const objectIdDisplay = document.getElementById('object-id-display');
-            const objectCoordsDisplayContainer = document.getElementById('object-coords-display-container');
             const objectCoordsDisplay = document.getElementById('object-coords-display');
             
-            const starEditFields = document.getElementById('star-edit-fields');
-            const starNameInput = document.getElementById('star-name');
-            const starCategorySelect = document.getElementById('star-category');
-            const starColorInput = document.getElementById('star-color');
-            const starImagePreviewContainer = document.getElementById('star-image-preview-container');
-            const starPhotoUrlInputs = [ 
-                document.getElementById('star-photo-url-1'),
-                document.getElementById('star-photo-url-2'),
-                document.getElementById('star-photo-url-3'),
-                document.getElementById('star-photo-url-4'),
-                document.getElementById('star-photo-url-5')
-            ];
-            const starDescriptionInput = document.getElementById('star-description');
-            const weaveStarStoryBtn = document.getElementById('weave-star-story-btn');
-            const weaveStoryLoading = document.getElementById('weave-story-loading');
-
             const starViewFields = document.getElementById('star-view-fields');
             const viewStarName = document.getElementById('view-star-name');
             const viewStarCategory = document.getElementById('view-star-category');
@@ -351,16 +279,8 @@
             const planetInfoFields = document.getElementById('planet-info-fields');
             const planetNameDisplay = document.getElementById('planet-name-display');
             const planetSummaryDisplay = document.getElementById('planet-summary-display');
-            const geminiPlanetName = document.getElementById('gemini-planet-name');
-            const geminiPlanetQuestion = document.getElementById('gemini-planet-question');
-            const askGeminiPlanetBtn = document.getElementById('ask-gemini-planet-btn');
-            const askPlanetLoading = document.getElementById('ask-planet-loading');
-            const geminiPlanetResponseArea = document.getElementById('gemini-planet-response-area');
                     
-            const saveStarBtn = document.getElementById('save-star-btn');
             const closePanelBtn = document.getElementById('close-panel-btn');
-            const userIdDisplay = document.getElementById('user-id-display');
-            const userModeDisplay = document.getElementById('user-mode-display');
             const messageBox = document.getElementById('message-box');
             const coordSearchInput = document.getElementById('coord-search-input');
             const coordSearchBtn = document.getElementById('coord-search-btn');
@@ -370,19 +290,15 @@
             let sun; 
             const planets = []; 
             const moons = [];
-            const stars = []; 
-            const PROCEDURAL_STAR_COUNT = 2500; 
-            const SPECIAL_STAR_COUNT = 50; 
+            const stars = []; // This will be populated from staticStarData
             let selectedObject = null;
             const raycaster = new THREE.Raycaster();
-            const mouse = new THREE.Vector2(); // For raycaster
-            const initialStarPositions = []; 
-            const specialStarInitialPositions = [];
+            const mouse = new THREE.Vector2(); 
             let shootingStarSystem;
             const SHOOTING_STAR_COUNT = 20;
             
-            // --- Data & Constants ---
-            const planetSummaries = { /* ... (Content as in your provided file) ... */ 
+            // --- Planet Data (Remains hardcoded) ---
+            const planetSummaries = { 
                 "Mercury": "The smallest planet in our solar system and closest to the Sun, Mercury is a world of extreme temperatures. It has a heavily cratered surface, resembling Earth's Moon.",
                 "Venus": "Venus is Earth's closest planetary neighbor. Similar in structure and size to Earth, Venus spins slowly in the opposite direction of most planets. Its thick atmosphere traps heat in a runaway greenhouse effect, making it the hottest planet in our solar system.",
                 "Earth": "Our home planet, Earth is the only place we know of so far that’s inhabited by living things. It's also the only planet in our solar system with liquid water on the surface.",
@@ -393,10 +309,6 @@
                 "Neptune": "Dark, cold, and whipped by supersonic winds, ice giant Neptune is the eighth and most distant planet in our solar system. More than 30 times as far from the Sun as Earth, Neptune is the only planet in our solar system not visible to the naked eye."
             };
             
-            // --- Initialization ---
-            await initializeFirebase(); 
-            fetchDailyCelestialThought(); 
-
             // --- Event Listeners Setup ---
             enterSolarSystemBtn.addEventListener('click', () => {
                 homepageView.style.display = 'none';
@@ -406,7 +318,7 @@
                     initThreeJS(); 
                     animate();
                 } else {
-                    if(controls) controls.enabled = true; // Re-enable controls
+                    if(controls) controls.enabled = true; 
                     loadingIndicator.style.display = 'none'; 
                 }
             });
@@ -418,113 +330,13 @@
 
                 if (controls) {
                     controls.reset(); 
-                    controls.enabled = false; // Disable controls when not in solar system view
+                    controls.enabled = false; 
                 }
-                selectedObject = null; // Clear selected object
-            });
-
-
-            adminLoginBtn.addEventListener('click', async () => { /* ... (Content as in your provided file, relies on onAuthStateChanged) ... */
-                const email = adminEmailInput.value;
-                const password = adminPasswordInput.value;
-                if (!email || !password) {
-                    showMessage("Please enter admin email and password.", true);
-                    return;
-                }
-                try {
-                    await signInWithEmailAndPassword(auth, email, password);
-                    showMessage("Admin login successful!");
-                } catch (error) {
-                    console.error("Admin Login Error:", error);
-                    showMessage(`Admin Login Failed: ${error.message}`, true);
-                }
-            });
-
-            adminLogoutBtn.addEventListener('click', async () => { /* ... (Content as in your provided file, relies on onAuthStateChanged) ... */
-                try {
-                    await signOut(auth);
-                    showMessage("Admin logged out.");
-                } catch (error) {
-                    console.error("Admin Logout Error:", error);
-                    showMessage(`Admin Logout Failed: ${error.message}`, true);
-                }
+                selectedObject = null; 
             });
             
-            // --- Firebase Initialization (Using refined version) ---
-            async function initializeFirebase() { 
-                try {
-                    app = initializeApp(firebaseConfig);
-                    db = getFirestore(app);
-                    auth = getAuth(app);
-                    // setLogLevel('debug'); 
-                    await setPersistence(auth, browserLocalPersistence); 
-
-                    return new Promise((resolve) => {
-                        onAuthStateChanged(auth, async (currentUser) => {
-                            if (currentUser) {
-                                userId = currentUser.uid;
-                                if (!currentUser.isAnonymous && currentUser.uid === ADMIN_UID) {
-                                    isAdmin = true;
-                                    console.log("Admin signed in:", userId);
-                                    adminLoginSection.style.display = 'none';
-                                    adminControls.style.display = 'block';
-                                } else if (!currentUser.isAnonymous && currentUser.uid !== ADMIN_UID) {
-                                    isAdmin = false;
-                                    console.log("Non-admin authenticated user signed in:", userId);
-                                    adminLoginSection.style.display = 'none'; 
-                                    adminControls.style.display = 'none';
-                                } else { // Anonymous user
-                                    isAdmin = false;
-                                    userId = currentUser.uid; 
-                                    console.log("Anonymous user signed in:", userId);
-                                    adminLoginSection.style.display = 'block';
-                                    adminControls.style.display = 'none';
-                                }
-                            } else { 
-                                isAdmin = false;
-                                userId = null;
-                                console.log("No user. Attempting anonymous sign-in.");
-                                adminControls.style.display = 'none';
-                                adminLoginSection.style.display = 'block'; 
-                                try {
-                                    const { user: anonUser } = await signInAnonymously(auth);
-                                    console.log("Signed in anonymously (callback will follow):", anonUser.uid);
-                                } catch (anonError) {
-                                    console.error("Anonymous Sign-In Error:", anonError);
-                                    userId = 'anonymous_error_' + crypto.randomUUID();
-                                    adminLoginSection.style.display = 'block'; 
-                                }
-                            }
-
-                            userIdDisplay.textContent = userId || 'Initializing...';
-                            userModeDisplay.textContent = isAdmin ? "Admin" : "User";
-                            
-                            if (!isAuthReady) { 
-                                isAuthReady = true;
-                                resolve(); 
-                            }
-                            checkAndLoadStarData(); 
-                        });
-                    });
-                } catch (error) { 
-                    console.error("Firebase initialization error:", error);
-                    showMessage("Error connecting to services. Some features may not work.", true);
-                    userId = 'error_user_' + crypto.randomUUID();
-                    userIdDisplay.textContent = userId;
-                    isAuthReady = true; 
-                    return Promise.resolve(); 
-                }
-            }
-
-            function checkAndLoadStarData() {
-                if (isAuthReady && isSceneReady && userId && !userId.startsWith('anonymous_error_')) {
-                    console.log("Auth and Scene are ready, loading star data.");
-                    loadAllStarData();
-                }
-            }
-
             // --- Texture Creation ---
-            function createTexture(color, detailColor = null, width = 256, height = 256) { /* ... (Content as in your provided file) ... */
+            function createTexture(color, detailColor = null, width = 256, height = 256) {
                 const canvas = document.createElement('canvas');
                 canvas.width = width;
                 canvas.height = height;
@@ -541,7 +353,7 @@
                 }
                 return new THREE.CanvasTexture(canvas);
             }
-             function createAtmosphereTexture() { /* ... (Content as in your provided file) ... */ 
+             function createAtmosphereTexture() { 
                 const canvas = document.createElement('canvas');
                 canvas.width = 128;
                 canvas.height = 128;
@@ -560,7 +372,7 @@
                 scene = new THREE.Scene();
                 scene.background = new THREE.Color(0x000011);
                 camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 20000);
-                camera.position.set(0, 350, 900); // Default camera position
+                camera.position.set(0, 350, 900); 
                 renderer = new THREE.WebGLRenderer({ antialias: true });
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 renderer.setPixelRatio(window.devicePixelRatio);
@@ -571,12 +383,11 @@
                 controls.enableDamping = true;
                 controls.minDistance = 10; 
                 controls.maxDistance = 10000;
-                controls.enabled = true; // Enable controls when solar system is active
+                controls.enabled = true; 
                 
                 const ambientLight = new THREE.AmbientLight(0xcccccc, 1.0); 
                 scene.add(ambientLight);
 
-                // Sun (Copied from your file)
                 const sunBaseColor = '#D95F02'; 
                 const sunDetailColor = '#A33B00'; 
                 const sunEmissiveColor = 0xBF4800; 
@@ -588,7 +399,7 @@
                 const sunLight = new THREE.PointLight(0xFFDAB9, 3.5, 15000); 
                 sun.add(sunLight);
 
-                const planetData = [ /* ... (Content as in your provided file) ... */ 
+                const planetData = [ 
                      { name: "Mercury", size: 3, color: '#888888', orbitRadius: 120, orbitSpeed: 0.012, moons: [] },
                     { name: "Venus", size: 7, color: '#E6E6FA', orbitRadius: 180, orbitSpeed: 0.009, moons: [] },
                     { name: "Earth", size: 7.5, color: '#4A90E2', orbitRadius: 250, orbitSpeed: 0.007, moons: [
@@ -610,10 +421,8 @@
                     { name: "Uranus", size: 15, color: '#AFEEEE', orbitRadius: 950, orbitSpeed: 0.001, moons: [] },
                     { name: "Neptune", size: 14, color: '#3B5998', orbitRadius: 1150, orbitSpeed: 0.0008, moons: [] }
                 ];
-
                 let earthRef = null; 
-
-                planetData.forEach(pData => { /* ... (Logic from your file to create planets and moons) ... */
+                planetData.forEach(pData => {
                     const planetMaterial = new THREE.MeshStandardMaterial({ color: new THREE.Color(pData.color), roughness: 0.8, metalness: 0.1 });
                     const planet = new THREE.Mesh(new THREE.SphereGeometry(pData.size, 32, 32), planetMaterial);
                     planet.position.x = pData.orbitRadius;
@@ -629,12 +438,11 @@
                     sun.add(planet); 
                     planets.push(planet);
                     if (pData.name === "Earth") earthRef = planet;
-
                     if (pData.hasRings) {
                         const ringMaterial = new THREE.MeshStandardMaterial({ color: new THREE.Color(pData.ringColor), side: THREE.DoubleSide, transparent: true, opacity: 0.6, roughness: 0.9 });
-                        const saturnRings = new THREE.Mesh(new THREE.RingGeometry(pData.size * 1.2, pData.size * 2.2, 64), ringMaterial);
-                        saturnRings.rotation.x = Math.PI / 2.2;
-                        planet.add(saturnRings); 
+                        const saturnRingsMesh = new THREE.Mesh(new THREE.RingGeometry(pData.size * 1.2, pData.size * 2.2, 64), ringMaterial);
+                        saturnRingsMesh.rotation.x = Math.PI / 2.2;
+                        planet.add(saturnRingsMesh); 
                     }
                     pData.moons.forEach(mData => {
                         const moonMaterial = new THREE.MeshStandardMaterial({ color: new THREE.Color(mData.color), roughness: 0.9 });
@@ -653,7 +461,6 @@
                         moons.push(moon);
                     });
                 });
-
                 if (earthRef) { 
                     const atmosphereMaterial = new THREE.SpriteMaterial({
                         map: createAtmosphereTexture(), color: 0x4A90E2, transparent: true, opacity: 0.3, blending: THREE.AdditiveBlending
@@ -664,76 +471,41 @@
                     earthRef.add(atmosphere);
                 }
 
-                createStars();
+                createStars(); // Now uses staticStarData
                 createShootingStars();
                 
                 window.addEventListener('resize', onWindowResize, false);
-                // Note: Canvas interaction listeners (pointerdown/up) are set in DOMContentLoaded
-                
-                isSceneReady = true; 
-                checkAndLoadStarData(); 
                 loadingIndicator.style.display = 'none';
             }
             
-            function pseudoRandom(seed) { /* ... (Content as in your provided file) ... */
-                let state = seed;
-                return function() {
-                    state = (1103515245 * state + 12345) % 2147483647;
-                    return state / 2147483647;
-                }
-            }
-
-            function createStars() { /* ... (Content as in your provided file, including originalPosition in userData) ... */
-                const starMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
-                const baseStarGeometry = new THREE.SphereGeometry(1, 8, 8); 
-                if (initialStarPositions.length === 0) {
-                    const prng = pseudoRandom(12345); 
-                    for (let i = 0; i < PROCEDURAL_STAR_COUNT; i++) {
-                        const x = (prng() - 0.5) * 15000; 
-                        const y = (prng() - 0.5) * 15000;
-                        const z = (prng() - 0.5) * 15000;
-                        const distSq = x*x + y*y + z*z;
-                        if (distSq < 500*500) { 
-                             initialStarPositions.push({ x: x + Math.sign(x || 1) * 500 , y: y  + Math.sign(y || 1) * 500, z: z + Math.sign(z || 1) * 500 });
-                        } else {
-                             initialStarPositions.push({ x, y, z });
-                        }
-                    }
-                }
-                initialStarPositions.forEach((pos, i) => {
-                    const star = new THREE.Mesh(baseStarGeometry.clone(), starMaterial.clone());
-                    star.position.set(pos.x, pos.y, pos.z);
-                    star.userData = { id: `star_${i}`, originalColor: star.material.color.getHex(), isStar: true, originalPosition: new THREE.Vector3(pos.x, pos.y, pos.z) };
+            function createStars() {
+                stars.length = 0; // Clear existing stars if any (for potential re-init)
+                staticStarData.forEach(starData => {
+                    const starMaterial = new THREE.MeshBasicMaterial({ color: new THREE.Color(starData.color) });
+                    // Star size can be made configurable in staticStarData if desired, e.g., starData.size || 1.5
+                    const starGeometry = new THREE.SphereGeometry(starData.size || 1.8, 16, 16); 
+                    const star = new THREE.Mesh(starGeometry, starMaterial);
+                    
+                    star.position.set(starData.position.x, starData.position.y, starData.position.z);
+                    
+                    star.userData = {
+                        id: starData.id,
+                        name: starData.name,
+                        category: starData.category,
+                        color: starData.color, // Store hex color string
+                        photoUrls: starData.photoUrls || [],
+                        description: starData.description,
+                        isStar: true,
+                        // Storing originalPosition as a Vector3 locally, though not strictly needed for saving anymore
+                        originalPosition: new THREE.Vector3(starData.position.x, starData.position.y, starData.position.z),
+                        originalColorHex: new THREE.Color(starData.color).getHexString() // Store hex for consistency
+                    };
                     stars.push(star);
-                    scene.add(star);
-                });
-
-                if (specialStarInitialPositions.length === 0) {
-                    const prngSpecial = pseudoRandom(54321);
-                    for (let i = 0; i < SPECIAL_STAR_COUNT; i++) {
-                        const R_MIN = 200; const R_MAX = 2000;
-                        let x, y, z, distSq;
-                        do { 
-                            x = (prngSpecial() - 0.5) * (R_MAX * 2.5); 
-                            y = (prngSpecial() - 0.5) * (R_MAX * 1.5);
-                            z = (prngSpecial() - 0.5) * (R_MAX * 2.5);
-                            distSq = x*x + y*y + z*z;
-                        } while (distSq < R_MIN*R_MIN || distSq > R_MAX*R_MAX);
-                        specialStarInitialPositions.push({ x, y, z });
-                    }
-                }
-                specialStarInitialPositions.forEach((pos, i) => {
-                    const specialStarGeometry = new THREE.SphereGeometry(2.5, 12, 12); 
-                    const specialStarMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFF33 }); 
-                    const star = new THREE.Mesh(specialStarGeometry, specialStarMaterial.clone());
-                    star.position.set(pos.x, pos.y, pos.z);
-                    star.userData = { id: `special_star_${i}`, originalColor: star.material.color.getHex(), isStar: true, originalPosition: new THREE.Vector3(pos.x, pos.y, pos.z) }; 
-                    stars.push(star); 
                     scene.add(star);
                 });
             }
             
-            function createShootingStars() { /* ... (Content as in your provided file) ... */
+            function createShootingStars() { 
                 const geometry = new THREE.BufferGeometry();
                 const material = new THREE.PointsMaterial({
                     color: 0xffffee, size: 3, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending, sizeAttenuation: true
@@ -754,7 +526,7 @@
                 scene.add(shootingStarSystem);
             }
 
-            function resetShootingStar(index) { /* ... (Content as in your provided file, ensuring lifespans is init) ... */
+            function resetShootingStar(index) { 
                 const R = 4000; 
                 const phi = Math.random() * Math.PI * 2;
                 const theta = Math.random() * Math.PI;
@@ -769,7 +541,7 @@
                 shootingStarSystem.userData.lifespans[index] = 50 + Math.random() * 100; 
             }
 
-            function updateShootingStars() { /* ... (Content as in your provided file) ... */
+            function updateShootingStars() { 
                 if (!shootingStarSystem) return;
                 const positions = shootingStarSystem.geometry.attributes.position;
                 for (let i = 0; i < SHOOTING_STAR_COUNT; i++) {
@@ -787,41 +559,7 @@
                 positions.needsUpdate = true;
             }
 
-            // --- Data Handling & Firestore ---
-            async function loadAllStarData() { /* ... (Content as in your provided file, uses appIdPath) ... */
-                if (!db || !isAuthReady || !userId || stars.length === 0) { 
-                    return; 
-                }
-                for (const star of stars) { 
-                    if (!star.userData.isStar) continue;
-                    const starId = star.userData.id;
-                    const starDocRef = doc(db, "artifacts", appIdPath, "public", "data", "stars", starId);
-                    try {
-                        const docSnap = await getDoc(starDocRef);
-                        if (docSnap.exists()) {
-                            const data = docSnap.data();
-                            star.userData.name = data.name;
-                            star.material.color.set(data.color || star.userData.originalColor);
-                            star.userData.photoUrls = data.photoUrls || []; 
-                            star.userData.description = data.description;
-                            star.userData.category = data.category || "general"; 
-                        } else {
-                            star.userData.name = star.userData.id.startsWith("special") ? "Special Star" : "Unnamed Star";
-                            star.material.color.set(star.userData.originalColor);
-                            star.userData.photoUrls = [];
-                            star.userData.description = "";
-                            star.userData.category = "general"; 
-                        }
-                    } catch (error) {
-                        console.error(`Error loading data for star ${starId}: ${error.message}`, error); 
-                        showMessage(`Error loading star ${starId}. See console.`, true);
-                        star.userData.name = star.userData.id.startsWith("special") ? "Special Star (Error)" : "Unnamed Star (Error)";
-                        star.material.color.set(star.userData.originalColor);
-                    }
-                }
-            }
-
-            function onWindowResize() { /* ... (Content as in your provided file) ... */
+            function onWindowResize() { 
                 if (camera && renderer) {
                     camera.aspect = window.innerWidth / window.innerHeight;
                     camera.updateProjectionMatrix();
@@ -832,22 +570,17 @@
             // --- Canvas Interaction Handling (Mobile Click Fix) ---
             let pointerDownTime = 0;
             let pointerDownPosition = new THREE.Vector2();
-            // These listeners are set up in DOMContentLoaded now
 
             function handleCanvasTap(event) { 
-                // Check if tap occurred on known UI elements
                 const uiElementsToIgnore = [infoPanel, searchBarContainer, backToHomepageBtn];
                 for (const uiElement of uiElementsToIgnore) {
                     if (uiElement && uiElement.contains(event.target)) {
-                        // console.log("Tap on UI element, ignoring for canvas selection:", event.target);
                         return; 
                     }
                 }
-                // Also, if info panel is visible and the click is anywhere on it (even not specific buttons)
                 if (infoPanel.classList.contains('visible') && infoPanel.contains(event.target)) {
                      return;
                 }
-
 
                 if (!scene || !camera) return; 
 
@@ -860,40 +593,28 @@
 
                 if (intersects.length > 0) {
                     let rawIntersectedObject = intersects[0].object;
-                    selectedObject = rawIntersectedObject; // Start with the actual mesh hit
+                    selectedObject = rawIntersectedObject; 
 
-                    // Traverse up to parent planet if a moon is clicked (using your original logic)
                     while (selectedObject.userData && selectedObject.userData.isMoon && selectedObject.parent) {
-                        // Check if parent is one of the main planet objects or the Sun
                         if (planets.includes(selectedObject.parent) || selectedObject.parent === sun) {
                              selectedObject = selectedObject.parent;
                         } else {
-                             // If parent is just another part of a complex moon model, or not a main planet, stop.
-                             // This might happen if moons have multiple meshes. For now, this break is safe.
                              break;
                         }
                     }
                     
                     const worldPosition = new THREE.Vector3();
-                    selectedObject.getWorldPosition(worldPosition); // Get world position of the final selectedObject
+                    selectedObject.getWorldPosition(worldPosition); 
                     objectCoordsDisplay.textContent = `X: ${worldPosition.x.toFixed(2)}, Y: ${worldPosition.y.toFixed(2)}, Z: ${worldPosition.z.toFixed(2)}`;
 
-                    starEditFields.style.display = 'none';
-                    starViewFields.style.display = 'none';
-                    planetInfoFields.style.display = 'none';
-                    saveStarBtn.style.display = 'none';
+                    starViewFields.style.display = 'none'; // Hide by default
+                    planetInfoFields.style.display = 'none'; // Hide by default
 
                     if (selectedObject.userData.isStar) {
                         panelTitle.textContent = "Star Details";
                         objectIdDisplay.textContent = selectedObject.userData.id;
-                        if (isAdmin) {
-                            starEditFields.style.display = 'block';
-                            saveStarBtn.style.display = 'inline-block';
-                            populateInfoPanelForStarEdit(selectedObject);
-                        } else {
-                            starViewFields.style.display = 'block';
-                            populateInfoPanelForStarView(selectedObject);
-                        }
+                        starViewFields.style.display = 'block';
+                        populateInfoPanelForStarView(selectedObject);
                     } else if (selectedObject.userData.isPlanet || selectedObject === sun) { 
                         const objectName = selectedObject.userData.name; 
                         panelTitle.textContent = `${objectName} Information`;
@@ -905,240 +626,40 @@
                 }
             }
             
-            // --- Gemini API ---
-            async function callGeminiAPI(promptText) { /* ... (Content as in your provided file, with API Key warning) ... */
-                const geminiApiKey = "AIzaSyCRu8Re2CX9QBbYBcjLtjJzyhDCzRD8a0k"; 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiApiKey}`;
-                
-                if (!geminiApiKey && !(typeof __firebase_config !== 'undefined')) { 
-                    const msg = "Gemini API key is missing or not configured for a secure backend call. Features using Gemini will not work without it.";
-                    console.error(msg);
-                    showMessage(msg, true);
-                    return null;
-                }
-                const payload = {
-                    contents: [{ role: "user", parts: [{ text: promptText }] }]
-                };
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        console.error("Gemini API Error Response:", errorData); 
-                        let errorMessage = `Gemini API request failed with status ${response.status}`;
-                        if (errorData && errorData.error && errorData.error.message) {
-                            errorMessage += `: ${errorData.error.message}`;
-                        }
-                        throw new Error(errorMessage);
-                    }
-                    const result = await response.json();
-                    if (result.candidates && result.candidates.length > 0 &&
-                        result.candidates[0].content && result.candidates[0].content.parts &&
-                        result.candidates[0].content.parts.length > 0) {
-                        return result.candidates[0].content.parts[0].text;
-                    } else {
-                        if (result.candidates && result.candidates.length > 0 && result.candidates[0].finishReason === "SAFETY") {
-                            console.warn("Gemini response blocked due to safety settings:", result.candidates[0].safetyRatings);
-                            throw new Error("Content generation blocked by safety filters. Try a different prompt.");
-                        }
-                        console.error("Unexpected Gemini API response structure:", result);
-                        throw new Error("Could not extract text from Gemini response.");
-                    }
-                } catch (error) {
-                    console.error("Error calling Gemini API:", error);
-                    showMessage(`Error communicating with Gemini: ${error.message}`, true);
-                    return null;
-                }
-            }
-
-            async function fetchDailyCelestialThought() { /* ... (Content as in your provided file) ... */
-                const prompt = "Generate a short (1-2 sentences), inspiring or reflective celestial thought about stars, the cosmos, or our place in the universe. Make it hopeful and wondrous.";
-                try {
-                    const thought = await callGeminiAPI(prompt);
-                    if (thought) {
-                        dailyCelestialThoughtEl.textContent = thought;
-                    } else {
-                        dailyCelestialThoughtEl.textContent = "Look up at the stars and wonder..."; 
-                    }
-                } catch (e) {
-                     dailyCelestialThoughtEl.textContent = "Could not fetch a celestial thought at this time.";
-                }
-            }
-
-            async function handleWeaveStarStory() { /* ... (Content as in your provided file) ... */
-                if (!selectedObject || !selectedObject.userData.isStar) return;
-                const currentStarName = starNameInput.value || "this star";
-                const currentDescription = starDescriptionInput.value;
-                const category = starCategorySelect.value;
-                let categoryContext = "";
-                switch(category) {
-                    case "pet": categoryContext = "This star is a memorial for a beloved pet."; break;
-                    case "couple": categoryContext = "This star is a tribute to a couple's love."; break;
-                    case "milestone": categoryContext = "This star commemorates a significant personal milestone."; break;
-                    default: categoryContext = "This star is a general memorial or tribute."; break; 
-                }
-                const prompt = `Write a short, poetic, and hopeful tribute for a celestial star named "${currentStarName}". ${categoryContext} This star is dedicated to a cherished memory. If there's an existing idea for the tribute like: "${currentDescription}", weave that in or expand upon it beautifully. If no idea is provided, create a tribute fitting the context. Keep it under 70 words.`;
-                weaveStoryLoading.style.display = 'inline';
-                weaveStarStoryBtn.disabled = true;
-                try {
-                    const story = await callGeminiAPI(prompt);
-                    if (story) {
-                        starDescriptionInput.value = story;
-                        showMessage("✨ Star story woven by Gemini!");
-                    } else {
-                        showMessage("Could not weave star story at this time (empty response).", true);
-                    }
-                } catch (e) {
-                     showMessage("Could not weave star story: " + e.message, true);
-                } finally {
-                    weaveStoryLoading.style.display = 'none';
-                    weaveStarStoryBtn.disabled = false;
-                }
-            }
-
-            async function handleAskGeminiAboutPlanet() { /* ... (Content as in your provided file) ... */
-                 if (!selectedObject || (!selectedObject.userData.isPlanet && selectedObject !== sun && !selectedObject.userData.isMoon) ) return;
-                const objectName = selectedObject.userData.name; 
-                const question = geminiPlanetQuestion.value.trim();
-                if (!question) {
-                    showMessage("Please type a question about " + objectName, true);
-                    return;
-                }
-                const prompt = `Regarding the celestial body "${objectName}", please answer the following question concisely and factually: "${question}"`;
-                askPlanetLoading.style.display = 'inline';
-                askGeminiPlanetBtn.disabled = true;
-                geminiPlanetResponseArea.style.display = 'none'; 
-                try {
-                    const answer = await callGeminiAPI(prompt);
-                    if (answer) {
-                        geminiPlanetResponseArea.textContent = answer;
-                        geminiPlanetResponseArea.style.display = 'block';
-                        showMessage(`✨ Gemini answered your question about ${objectName}!`);
-                    } else {
-                        geminiPlanetResponseArea.textContent = "Sorry, I couldn't get an answer from Gemini at this time (empty response).";
-                        geminiPlanetResponseArea.style.display = 'block';
-                    }
-                } catch (e) {
-                    geminiPlanetResponseArea.textContent = "Sorry, I couldn't get an answer: " + e.message;
-                    geminiPlanetResponseArea.style.display = 'block';
-                } finally {
-                    askPlanetLoading.style.display = 'none';
-                    askGeminiPlanetBtn.disabled = false;
-                }
-            }
-            
             // --- UI Panel Population & Updates ---
-            function updateAllStarImagePreviews() {
-                starImagePreviewContainer.innerHTML = ''; 
-                starPhotoUrlInputs.forEach(input => {
-                    const url = input.value.trim();
-                    if (url) {
+             function populateInfoPanelForStarView(star) { 
+                // Data now comes directly from star.userData, which was populated from staticStarData
+                viewStarName.textContent = star.userData.name;
+                const category = star.userData.category;
+                let categoryText = category.charAt(0).toUpperCase() + category.slice(1);
+                if (category === "pet") categoryText = "Pet Memorial";
+                else if (category === "couple") categoryText = "Couple Tribute";
+                else if (category === "milestone") categoryText = "Personal Milestone";
+                else if (category === "general") categoryText = "General Memorial";
+                viewStarCategory.textContent = categoryText;
+
+                viewStarPhotoContainer.innerHTML = ''; 
+                const photoUrls = Array.isArray(star.userData.photoUrls) ? star.userData.photoUrls.filter(url => url && url.trim()) : [];
+
+                if (photoUrls.length > 0) {
+                    photoUrls.forEach(url => {
                         const img = document.createElement('img');
                         img.src = url;
-                        img.alt = "Star photo preview";
-                        img.onerror = () => { 
-                            img.alt = "Invalid image URL";
-                        };
-                        starImagePreviewContainer.appendChild(img);
-                    }
-                });
-            }
-            
-            function populateInfoPanelForStarEdit(star) { 
-                const starDocRef = doc(db, "artifacts", appIdPath, "public", "data", "stars", star.userData.id);
-                getDoc(starDocRef).then(docSnap => {
-                    let data = {}; 
-                    if (docSnap.exists()) { 
-                        data = docSnap.data(); 
-                    } else { 
-                        data.name = star.userData.name || (star.userData.id.startsWith("special") ? "Special Star" : "Unnamed Star");
-                        data.category = star.userData.category || "general";
-                        data.color = star.userData.color || `#${new THREE.Color(star.userData.originalColor || 0xFFFFFF).getHexString()}`;
-                        data.photoUrls = star.userData.photoUrls || [];
-                        data.description = star.userData.description || "";
-                    }
-
-                    starNameInput.value = data.name;
-                    starCategorySelect.value = data.category || "general"; 
-                    starColorInput.value = data.color; 
-                    
-                    const photoUrls = data.photoUrls || [];
-                    starPhotoUrlInputs.forEach((input, i) => {
-                        input.value = photoUrls[i] || "";
+                        img.alt = "Star photo";
+                        img.onerror = () => { img.style.display = 'none'; };
+                        viewStarPhotoContainer.appendChild(img);
                     });
-                    updateAllStarImagePreviews(); 
-
-                    starDescriptionInput.value = data.description;
-                }).catch(error => { 
-                    console.error(`Error fetching star details for panel (ID: ${star.userData.id}): ${error.message}`, error); 
-                    showMessage(`Could not load star details for ${star.userData.id}. Using local data. Error: ${error.message}`, true);
-                    starNameInput.value = star.userData.name || (star.userData.id.startsWith("special") ? "Special Star" : "Unnamed Star");
-                    starCategorySelect.value = star.userData.category || "general";
-                    starColorInput.value = star.userData.color || `#${new THREE.Color(star.userData.originalColor || 0xFFFFFF).getHexString()}`;
-                    const photoUrls = star.userData.photoUrls || [];
-                     starPhotoUrlInputs.forEach((input, i) => {
-                        input.value = photoUrls[i] || "";
-                    });
-                    updateAllStarImagePreviews();
-                    starDescriptionInput.value = star.userData.description || "";
-                });
+                } else {
+                     const img = document.createElement('img');
+                     img.src = "https://placehold.co/300x200/000022/FFFFFF?text=No+Image"; 
+                     img.alt = "No image available";
+                     viewStarPhotoContainer.appendChild(img);
+                }
+                
+                viewStarDescription.textContent = star.userData.description || "No description available.";
             }
 
-            function populateInfoPanelForStarView(star) { /* ... (Content as in your provided file, uses appIdPath) ... */ 
-                 const starDocRef = doc(db, "artifacts", appIdPath, "public", "data", "stars", star.userData.id);
-                getDoc(starDocRef).then(docSnap => {
-                    let data = {}; 
-                    if (docSnap.exists()) { 
-                        data = docSnap.data(); 
-                    }  else { 
-                        data.name = star.userData.name || (star.userData.id.startsWith("special") ? "Special Star" : "Unnamed Star");
-                        data.category = star.userData.category || "general";
-                        data.photoUrls = star.userData.photoUrls || [];
-                        data.description = star.userData.description || "No description available.";
-                    }
-
-                    viewStarName.textContent = data.name;
-                    const category = data.category;
-                    let categoryText = category.charAt(0).toUpperCase() + category.slice(1);
-                    if (category === "pet") categoryText = "Pet Memorial";
-                    else if (category === "couple") categoryText = "Couple Tribute";
-                    else if (category === "milestone") categoryText = "Personal Milestone";
-                    else if (category === "general") categoryText = "General Memorial";
-                    viewStarCategory.textContent = categoryText;
-
-                    viewStarPhotoContainer.innerHTML = ''; 
-                    const photoUrls = Array.isArray(data.photoUrls) ? data.photoUrls.filter(url => url && url.trim()) : [];
-
-                    if (photoUrls.length > 0) {
-                        photoUrls.forEach(url => {
-                            const img = document.createElement('img');
-                            img.src = url;
-                            img.alt = "Star photo";
-                            img.onerror = () => { img.style.display = 'none'; };
-                            viewStarPhotoContainer.appendChild(img);
-                        });
-                    } else {
-                         const img = document.createElement('img');
-                         img.src = "https://placehold.co/300x200/000022/FFFFFF?text=No+Image"; 
-                         img.alt = "No image available";
-                         viewStarPhotoContainer.appendChild(img);
-                    }
-                    
-                    viewStarDescription.textContent = data.description || "No description available.";
-                }).catch(error => {
-                    console.error(`Error fetching star details for view (ID: ${star.userData.id}): ${error.message}`, error); 
-                    showMessage(`Could not load star details for ${star.userData.id}. Error: ${error.message}`, true);
-                    viewStarName.textContent = (star.userData.name || (star.userData.id.startsWith("special") ? "Special Star" : "Unnamed Star")) + " (Error)";
-                    viewStarCategory.textContent = "N/A";
-                    viewStarPhotoContainer.innerHTML = '<p>Error loading images.</p>';
-                    viewStarDescription.textContent = "Could not load details.";
-                });
-            }
-
-            function populateInfoPanelForPlanet(planetOrMoon) { /* ... (Content as in your provided file) ... */
+            function populateInfoPanelForPlanet(planetOrMoon) { 
                 const objectName = planetOrMoon.userData.name;
                 let summary = planetOrMoon.userData.summary; 
 
@@ -1151,74 +672,9 @@
                 
                 planetNameDisplay.textContent = objectName;
                 planetSummaryDisplay.textContent = summary || "Details for this celestial body are being gathered.";
-                geminiPlanetName.textContent = objectName; 
-                geminiPlanetQuestion.value = ""; 
-                geminiPlanetResponseArea.style.display = 'none'; 
-                geminiPlanetResponseArea.textContent = "";
-            }
-
-            // Refined saveSelectedStarData
-            async function saveSelectedStarData() {
-                if (!isAdmin || !selectedObject || !selectedObject.userData.isStar || !db || !isAuthReady || !userId) {
-                    showMessage("Cannot save: Not admin, no star selected, or services not ready.", true);
-                    return;
-                }
-                const starToSave = selectedObject; 
-                const starId = starToSave.userData.id;
-                const photoUrlsToSave = starPhotoUrlInputs.map(input => input.value.trim()).filter(url => url); 
-
-                const dataToSave = {
-                    name: starNameInput.value.trim() || (starId.startsWith("special") ? "Special Star" : "Unnamed Star"),
-                    category: starCategorySelect.value, 
-                    color: starColorInput.value, 
-                    photoUrls: photoUrlsToSave, 
-                    description: starDescriptionInput.value.trim() || "",
-                    updatedAt: serverTimestamp(),
-                    updatedBy: userId
-                };
-                
-                const starDocRef = doc(db, "artifacts", appIdPath, "public", "data", "stars", starId);
-                
-                try {
-                    const docSnap = await getDoc(starDocRef);
-                    if (!docSnap.exists()) { 
-                        dataToSave.createdAt = serverTimestamp();
-                        dataToSave.createdBy = userId;
-                        if (starToSave.userData.originalPosition instanceof THREE.Vector3) {
-                           dataToSave.originalPosition = { 
-                               x: starToSave.userData.originalPosition.x,
-                               y: starToSave.userData.originalPosition.y,
-                               z: starToSave.userData.originalPosition.z
-                           };
-                        } else {
-                            const worldPosition = new THREE.Vector3();
-                            starToSave.getWorldPosition(worldPosition);
-                            dataToSave.originalPosition = { x: worldPosition.x, y: worldPosition.y, z: worldPosition.z };
-                            console.warn(`Star ${starId} did not have a valid userData.originalPosition. Saved current world position.`);
-                        }
-                    }
-
-                    await setDoc(starDocRef, dataToSave, { merge: true }); 
-                    
-                    starToSave.userData.name = dataToSave.name;
-                    starToSave.userData.category = dataToSave.category; 
-                    starToSave.userData.color = dataToSave.color; 
-                    starToSave.userData.photoUrls = dataToSave.photoUrls;
-                    starToSave.userData.description = dataToSave.description;
-                    
-                    if (starToSave.material && starToSave.material.color) { 
-                        starToSave.material.color.set(dataToSave.color); 
-                    }
-
-                    showMessage(`Star '${dataToSave.name}' saved successfully!`);
-                    infoPanel.classList.remove('visible');
-                } catch (error) {
-                    console.error(`Error saving star data for ID ${starId}:`, error);
-                    showMessage(`Failed to save star data for ${starId}. Error: ${error.message}`, true);
-                }
             }
             
-            function searchStarByUserInput() { /* ... (Content as in your provided file, uses appIdPath) ... */
+            function searchStarByUserInput() { 
                 const input = coordSearchInput.value.trim();
                 if (!input) {
                     showMessage("Please enter coordinates, Star ID, or Planet/Moon Name.", true);
@@ -1228,7 +684,8 @@
                 let foundTarget = null;
                 let targetType = null; 
 
-                foundTarget = stars.find(s => s.userData.id.toLowerCase() === input.toLowerCase());
+                // 1. Search static stars by ID or Name (case-insensitive for name)
+                foundTarget = stars.find(s => s.userData.id.toLowerCase() === input.toLowerCase() || s.userData.name.toLowerCase().includes(input.toLowerCase()));
                 if (foundTarget) targetType = "star";
 
                 if (!foundTarget) {
@@ -1248,7 +705,7 @@
                     }
                 }
                 
-                if (!foundTarget) {
+                if (!foundTarget && input.includes(',')) { // Only try coord search if comma is present
                     const parts = input.split(',').map(part => parseFloat(part.trim()));
                     if (parts.length === 3 && !parts.some(isNaN)) {
                         const searchPos = new THREE.Vector3(parts[0], parts[1], parts[2]);
@@ -1271,7 +728,7 @@
                 }
 
                 if (foundTarget) {
-                    let displayObject = foundTarget; // Object whose info panel will be shown
+                    let displayObject = foundTarget; 
                     if (targetType === "moon" && foundTarget.userData.parentPlanet) {
                         displayObject = foundTarget.userData.parentPlanet; 
                     }
@@ -1282,7 +739,7 @@
                     controls.target.copy(focusTargetPosition); 
 
                     let offsetDistance;
-                    const targetRadius = foundTarget.geometry.parameters.radius || 1;
+                    const targetRadius = foundTarget.geometry.parameters.radius || (targetType === "star" ? 1.8 : 10); // Use default from creation
                     if (targetType === "star") {
                         offsetDistance = targetRadius * 15 + 70; 
                     } else { 
@@ -1299,30 +756,21 @@
                     camera.position.copy(newCameraPosition);
                     controls.update(); 
 
-                    starEditFields.style.display = 'none';
                     starViewFields.style.display = 'none';
                     planetInfoFields.style.display = 'none';
-                    saveStarBtn.style.display = 'none';
-                    objectIdDisplayContainer.style.display = 'block'; 
-                    objectCoordsDisplayContainer.style.display = 'block';
                     
                     const displayObjWorldPos = new THREE.Vector3();
                     displayObject.getWorldPosition(displayObjWorldPos); 
                     objectCoordsDisplay.textContent = `X: ${displayObjWorldPos.x.toFixed(2)}, Y: ${displayObjWorldPos.y.toFixed(2)}, Z: ${displayObjWorldPos.z.toFixed(2)}`;
 
-                    selectedObject = displayObject; // Update global selectedObject for panel
+                    selectedObject = displayObject; 
 
                     if (displayObject.userData.isStar) {
                         panelTitle.textContent = "Star Details";
                         objectIdDisplay.textContent = displayObject.userData.id;
-                        if (isAdmin) {
-                            starEditFields.style.display = 'block';
-                            saveStarBtn.style.display = 'inline-block';
-                            populateInfoPanelForStarEdit(displayObject);
-                        } else {
-                            starViewFields.style.display = 'block';
-                            populateInfoPanelForStarView(displayObject);
-                        }
+                        starViewFields.style.display = 'block';
+                        populateInfoPanelForStarView(displayObject);
+                        
                     } else if (displayObject.userData.isPlanet || displayObject === sun) { 
                         const objectName = displayObject.userData.name;
                         panelTitle.textContent = `${objectName} Information`;
@@ -1338,27 +786,28 @@
                 }
             }
 
-            function showMessage(message, isError = false) { /* ... (Content as in your provided file) ... */
+            function showMessage(message, isError = false) { 
                 messageBox.textContent = message;
                 messageBox.style.backgroundColor = isError ? 'rgba(200, 50, 50, 0.9)' : 'rgba(74, 144, 226, 0.9)';
                 messageBox.classList.add('visible');
                 setTimeout(() => { messageBox.classList.remove('visible'); }, 3000);
             }
             
-            function animate() { /* ... (Content as in your provided file) ... */
+            function animate() { 
                 requestAnimationFrame(animate);
                 if (controls && controls.enabled) controls.update(); 
 
                 const time = Date.now() * 0.0001; 
 
                 planets.forEach(planet => {
-                    planet.userData.orbitAngle = time * (planet.userData.orbitSpeed * 100) + (planet.userData.initialOrbitAngle || 0); 
+                    // Use initialOrbitAngle to ensure consistent starting positions if desired, or remove for continuous motion from random start
+                    planet.userData.orbitAngle = time * (planet.userData.orbitSpeed * 100) + (planet.userData.initialOrbitAngle || planet.userData.orbitAngle || 0); 
                     planet.position.x = Math.cos(planet.userData.orbitAngle) * planet.userData.orbitRadius;
                     planet.position.z = Math.sin(planet.userData.orbitAngle) * planet.userData.orbitRadius;
                     planet.rotation.y += 0.002; 
                 });
                 moons.forEach(moon => {
-                    moon.userData.orbitAngle = time * (moon.userData.orbitSpeed * 100) + (moon.userData.initialOrbitAngle || 0); 
+                    moon.userData.orbitAngle = time * (moon.userData.orbitSpeed * 100) + (moon.userData.initialOrbitAngle || moon.userData.orbitAngle || 0); 
                     moon.position.x = Math.cos(moon.userData.orbitAngle) * moon.userData.orbitRadius;
                     moon.position.z = Math.sin(moon.userData.orbitAngle) * moon.userData.orbitRadius;
                     moon.rotation.y += 0.005; 
@@ -1368,43 +817,31 @@
                 if (renderer && scene && camera) renderer.render(scene, camera);
             }
 
-            // Setup canvas interaction listeners in DOMContentLoaded
-            // These variables are already declared globally in this script block.
-            // let pointerDownTime = 0; 
-            // let pointerDownPosition = new THREE.Vector2();
-
+            // Canvas interaction listeners
             canvasContainer.addEventListener('pointerdown', (event) => {
-                if (event.isPrimary === false) return; // Ignore multi-touch
+                if (event.isPrimary === false) return; 
                 pointerDownTime = Date.now();
                 pointerDownPosition.set(event.clientX, event.clientY);
             }, false);
 
             canvasContainer.addEventListener('pointerup', (event) => {
-                if (event.isPrimary === false) return; // Ignore multi-touch
+                if (event.isPrimary === false) return; 
 
-                const timeThreshold = 250; // ms for a tap
-                const positionThreshold = 10; // pixels for movement tolerance
+                const timeThreshold = 250; 
+                const positionThreshold = 10; 
 
                 const upTime = Date.now();
                 const pressDuration = upTime - pointerDownTime;
                 const moveDistance = pointerDownPosition.distanceTo(new THREE.Vector2(event.clientX, event.clientY));
 
                 if (pressDuration < timeThreshold && moveDistance < positionThreshold) {
-                    handleCanvasTap(event); // Process as a tap
+                    handleCanvasTap(event); 
                 }
             }, false);
 
-            // Setup other general event listeners
-            saveStarBtn.addEventListener('click', saveSelectedStarData);
+            // Other general event listeners
             closePanelBtn.addEventListener('click', () => infoPanel.classList.remove('visible'));
-            
-            starPhotoUrlInputs.forEach(input => { // For image previews
-                input.addEventListener('input', updateAllStarImagePreviews);
-            });
-
             coordSearchBtn.addEventListener('click', searchStarByUserInput);
-            weaveStarStoryBtn.addEventListener('click', handleWeaveStarStory);
-            askGeminiPlanetBtn.addEventListener('click', handleAskGeminiAboutPlanet);
 
         }); // End of DOMContentLoaded listener
     </script>
