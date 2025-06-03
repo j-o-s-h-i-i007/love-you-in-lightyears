@@ -57,6 +57,9 @@
             font-size: 0.75em;
             color: rgba(200, 200, 255, 0.6);
         }
+        #admin-login-section { margin-top: 30px; padding:15px; background-color:rgba(0,0,30,0.5); border-radius:8px; }
+        #admin-login-section input { color: #333; margin: 5px; padding: 8px; border-radius: 4px; border: 1px solid #ccc;}
+        #admin-login-section button { background-color: #673AB7; color:white; padding: 8px 15px; border-radius:4px; }
 
 
         #solarsystem-view { }
@@ -139,6 +142,9 @@
         .button-container { display: flex; justify-content: space-between; margin-top: 20px; }
 
         #user-info { position: fixed; bottom: 10px; left: 10px; background-color: rgba(0,0,0,0.5); padding: 8px 12px; border-radius: 6px; font-size: 0.9em; z-index: 5; }
+        #admin-controls { position: fixed; bottom: 10px; right: 10px; z-index: 25; }
+        #admin-controls button { font-size: 0.8em; padding: 5px 10px; background-color: #777; color:white; border-radius:4px; }
+
         #message-box { position: fixed; bottom: 10px; right: 10px; background-color: rgba(74, 144, 226, 0.9); color: white; padding: 10px 15px; border-radius: 6px; z-index: 100; opacity: 0; transition: opacity 0.5s; font-size: 0.9em; }
         #message-box.visible { opacity: 1; }
         #loading-indicator { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 200; color: white; font-size: 1.5em; }
@@ -155,6 +161,11 @@
             Contact me: <a href="#" id="contact-link-placeholder">[Your IG/WhatsApp/Email Here]</a>
         </div>
         <button id="enter-solar-system-btn">Enter Solar System</button>
+        <div id="admin-login-section">
+            <input type="email" id="admin-email" placeholder="Admin Email">
+            <input type="password" id="admin-password" placeholder="Admin Password">
+            <button id="admin-login-btn">Admin Login</button>
+        </div>
         <div id="homepage-credit">Designed by Josh and Gemini AI</div>
     </div>
 
@@ -231,6 +242,9 @@
             </div>
         </div>
         <div id="user-info">User ID: <span id="user-id-display"></span> (<span id="user-mode-display">User</span>)</div>
+        <div id="admin-controls" style="display:none;">
+             <button id="admin-logout-btn">Admin Logout</button>
+        </div>
     </div>
 
     <div id="loading-indicator" style="display:none;">Loading Solar System...</div>
@@ -240,14 +254,19 @@
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { 
+            getAuth, 
+            signInAnonymously, 
+            signInWithCustomToken, 
+            onAuthStateChanged, 
+            setPersistence, 
+            browserLocalPersistence,
+            signInWithEmailAndPassword, // Added for admin login
+            signOut // Added for admin logout
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, serverTimestamp, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        // Analytics import can be added if you set it up in Firebase console and want to use it.
-        // import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
-
 
         document.addEventListener('DOMContentLoaded', () => {
-            // THIS IS WHERE YOUR FIREBASE CONFIG GOES
             const firebaseConfigFromUser = {
                 apiKey: "AIzaSyDxNAcZ_q9R-TDOkmYOratPzYK-sK5PCB4",
                 authDomain: "love-you-in-lightyears.firebaseapp.com",
@@ -260,6 +279,10 @@
             
             const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : firebaseConfigFromUser;
             const appId = typeof __app_id !== 'undefined' ? __app_id : 'love-you-lightyears-prod'; 
+            
+            // !!! IMPORTANT: Replace this with your actual Admin User ID from Firebase Authentication !!!
+            const ADMIN_UID = "qdoYG8voQWhCCMPWipwlGxXsa6A2"; 
+
 
             let app, auth, db;
             let userId = null;
@@ -270,6 +293,13 @@
             const dailyCelestialThoughtEl = document.getElementById('daily-celestial-thought');
             const solarsystemView = document.getElementById('solarsystem-view');
             const enterSolarSystemBtn = document.getElementById('enter-solar-system-btn');
+            const adminLoginSection = document.getElementById('admin-login-section');
+            const adminEmailInput = document.getElementById('admin-email');
+            const adminPasswordInput = document.getElementById('admin-password');
+            const adminLoginBtn = document.getElementById('admin-login-btn');
+            const adminControls = document.getElementById('admin-controls');
+            const adminLogoutBtn = document.getElementById('admin-logout-btn');
+
             const loadingIndicator = document.getElementById('loading-indicator');
             const canvasContainer = document.getElementById('canvas-container');
             const infoPanel = document.getElementById('info-panel');
@@ -367,6 +397,35 @@
                     loadingIndicator.style.display = 'none'; 
                 }
             });
+
+            adminLoginBtn.addEventListener('click', async () => {
+                const email = adminEmailInput.value;
+                const password = adminPasswordInput.value;
+                if (!email || !password) {
+                    showMessage("Please enter admin email and password.", true);
+                    return;
+                }
+                try {
+                    await signInWithEmailAndPassword(auth, email, password);
+                    // onAuthStateChanged will handle setting isAdmin and UI updates
+                    showMessage("Admin login successful!");
+                    adminLoginSection.style.display = 'none'; // Hide login form
+                } catch (error) {
+                    console.error("Admin Login Error:", error);
+                    showMessage(`Admin Login Failed: ${error.message}`, true);
+                }
+            });
+
+            adminLogoutBtn.addEventListener('click', async () => {
+                try {
+                    await signOut(auth);
+                    // onAuthStateChanged will handle UI updates (signing in anonymously)
+                    showMessage("Admin logged out.");
+                } catch (error) {
+                    console.error("Admin Logout Error:", error);
+                    showMessage(`Admin Logout Failed: ${error.message}`, true);
+                }
+            });
             
             async function initializeFirebase() { 
                 try {
@@ -378,22 +437,34 @@
 
                     return new Promise((resolve) => {
                         onAuthStateChanged(auth, async (user) => {
-                            if (user) {
+                            if (user && !user.isAnonymous) { // Check if not anonymous
                                 userId = user.uid;
-                                isAdmin = (typeof __initial_auth_token !== 'undefined' && __initial_auth_token !== "") || userId === "KNOWN_ADMIN_UID_PLACEHOLDER"; 
-                            } else {
-                                try {
-                                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                                         await signInWithCustomToken(auth, __initial_auth_token);
-                                         isAdmin = true; 
-                                    } else {
+                                if (userId === ADMIN_UID) {
+                                    isAdmin = true;
+                                    adminLoginSection.style.display = 'none';
+                                    adminControls.style.display = 'block';
+                                } else {
+                                    isAdmin = false; // A signed-in user but not THE admin
+                                    adminControls.style.display = 'none';
+                                }
+                                console.log("Authenticated user:", userId, "Is Admin:", isAdmin);
+                            } else { // No specific user signed in, or was anonymous
+                                isAdmin = false;
+                                adminControls.style.display = 'none';
+                                adminLoginSection.style.display = 'block'; // Show login form if not admin
+                                // Attempt anonymous sign-in if no user at all
+                                if (!auth.currentUser) {
+                                    try {
                                         await signInAnonymously(auth);
-                                        isAdmin = false; 
+                                        userId = auth.currentUser ? auth.currentUser.uid : 'anonymous_' + crypto.randomUUID();
+                                        console.log("Signed in anonymously after logout or initial load:", userId);
+                                    } catch (anonError) {
+                                        console.error("Anonymous Sign-In Error:", anonError);
+                                        userId = 'anonymous_error_' + crypto.randomUUID();
                                     }
-                                } catch (error) {
-                                    console.error("Error during sign-in:", error);
-                                    userId = 'anonymous_' + crypto.randomUUID(); 
-                                    isAdmin = false;
+                                } else if (user && user.isAnonymous) {
+                                     userId = user.uid;
+                                     console.log("Already anonymously signed in:", userId);
                                 }
                             }
                             userIdDisplay.textContent = userId || 'Initializing...';
@@ -747,9 +818,18 @@
                 }
             }
             
-            async function callGeminiAPI(promptText) { /* ... (unchanged) ... */
-                const apiKey = "AIzaSyCRu8Re2CX9QBbYBcjLtjJzyhDCzRD8a0k"; 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+            async function callGeminiAPI(promptText) {
+                // IMPORTANT: REPLACE "qdoYG8voQWhCCMPWipwlGxXsa6A2" WITH YOUR ACTUAL GEMINI API KEY FOR DEPLOYMENT
+                const geminiApiKey = "AIzaSyCRu8Re2CX9QBbYBcjLtjJzyhDCzRD8a0k"; // <<<< YOUR GEMINI API KEY GOES HERE FOR LIVE SITE >>>>
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiApiKey}`;
+                
+                if (!geminiApiKey && !(typeof __firebase_config !== 'undefined')) { 
+                    const msg = "Gemini API key is missing. Features using Gemini will not work on the live site without it.";
+                    console.error(msg);
+                    showMessage(msg, true);
+                    return null;
+                }
+
                 const payload = {
                     contents: [{ role: "user", parts: [{ text: promptText }] }]
                 };
