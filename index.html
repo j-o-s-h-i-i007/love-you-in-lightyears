@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love You in Lightyears</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> <title>Love You in Lightyears</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="importmap">
         {
@@ -14,7 +13,7 @@
         }
     </script>
     <style>
-        body { margin: 0; overflow: hidden; font-family: 'Inter', sans-serif; background-color: #000011; color: #fff; }
+        body { margin: 0; overflow: hidden; font-family: 'Inter', sans-serif; background-color: #000011; color: #fff; -webkit-tap-highlight-color: transparent; /* Prevent tap highlight on mobile */ }
         .view { width: 100vw; height: 100vh; position: fixed; top: 0; left: 0; display: none; }
         #homepage-view {
             display: flex;
@@ -61,10 +60,25 @@
         #admin-login-section input { color: #333; margin: 5px; padding: 8px; border-radius: 4px; border: 1px solid #ccc;}
         #admin-login-section button { background-color: #673AB7; color:white; padding: 8px 15px; border-radius:4px; }
 
-
         #solarsystem-view { }
-        #canvas-container { width: 100%; height: 100%; position: absolute; cursor: grab; }
+        #canvas-container { width: 100%; height: 100%; position: absolute; cursor: grab; touch-action: none; /* Prevent default touch actions like scrolling/zooming on canvas */ }
         #canvas-container:active { cursor: grabbing; }
+
+        #back-to-homepage-btn {
+            position: fixed; 
+            top: 10px; 
+            left: 10px; 
+            z-index: 30; 
+            padding: 8px 12px; 
+            background-color: rgba(96, 125, 139, 0.8); /* Slightly transparent */
+            backdrop-filter: blur(5px);
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+         #back-to-homepage-btn:hover { background-color: rgba(76, 105, 119, 0.9); }
 
 
         #search-bar-container {
@@ -170,6 +184,8 @@
     </div>
 
     <div id="solarsystem-view" class="view">
+        <button id="back-to-homepage-btn">Back to Homepage</button> 
+        
         <div id="canvas-container"></div>
         <div id="search-bar-container">
             <input type="text" id="coord-search-input" placeholder="X,Y,Z, Star ID or Planet">
@@ -257,7 +273,6 @@
         import { 
             getAuth, 
             signInAnonymously, 
-            // signInWithCustomToken, // Not used
             onAuthStateChanged, 
             setPersistence, 
             browserLocalPersistence,
@@ -280,28 +295,27 @@
             const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : firebaseConfigFromUser;
             const appIdPath = typeof __app_id !== 'undefined' ? __app_id : 'love-you-lightyears-prod'; 
             
-            // !!! IMPORTANT: Replace this with your actual Admin User ID from Firebase Authentication !!!
-            // This UID is for the user you created with Email/Password in Firebase Auth for admin access.
             const ADMIN_UID = "qdoYG8voQWhCCMPWipwlGxXsa6A2"; 
 
             let app, auth, db;
             let userId = null;
             let isAuthReady = false;
             let isAdmin = false;
-            let isSceneReady = false; // New flag to track if Three.js scene is initialized
+            let isSceneReady = false; 
 
             // --- DOM Element Variables ---
             const homepageView = document.getElementById('homepage-view');
             const dailyCelestialThoughtEl = document.getElementById('daily-celestial-thought');
             const solarsystemView = document.getElementById('solarsystem-view');
             const enterSolarSystemBtn = document.getElementById('enter-solar-system-btn');
+            const backToHomepageBtn = document.getElementById('back-to-homepage-btn'); // New button
             const adminLoginSection = document.getElementById('admin-login-section');
             const adminEmailInput = document.getElementById('admin-email');
             const adminPasswordInput = document.getElementById('admin-password');
             const adminLoginBtn = document.getElementById('admin-login-btn');
             const adminControls = document.getElementById('admin-controls');
             const adminLogoutBtn = document.getElementById('admin-logout-btn');
-            const searchBarContainer = document.getElementById('search-bar-container'); // Get search bar
+            const searchBarContainer = document.getElementById('search-bar-container'); 
 
             const loadingIndicator = document.getElementById('loading-indicator');
             const canvasContainer = document.getElementById('canvas-container');
@@ -316,7 +330,6 @@
             const starNameInput = document.getElementById('star-name');
             const starCategorySelect = document.getElementById('star-category');
             const starColorInput = document.getElementById('star-color');
-            // const starImageInputsContainer = document.getElementById('star-image-inputs-container'); // Already got
             const starImagePreviewContainer = document.getElementById('star-image-preview-container');
             const starPhotoUrlInputs = [ 
                 document.getElementById('star-photo-url-1'),
@@ -354,7 +367,7 @@
 
             // --- Three.js Variables ---
             let scene, camera, renderer, controls;
-            let sun; // earth, saturnRings are set in initThreeJS if needed locally
+            let sun; 
             const planets = []; 
             const moons = [];
             const stars = []; 
@@ -362,15 +375,14 @@
             const SPECIAL_STAR_COUNT = 50; 
             let selectedObject = null;
             const raycaster = new THREE.Raycaster();
-            const mouse = new THREE.Vector2();
+            const mouse = new THREE.Vector2(); // For raycaster
             const initialStarPositions = []; 
             const specialStarInitialPositions = [];
-            // const textureLoader = new THREE.TextureLoader(); // Defined locally if needed or use one instance
             let shootingStarSystem;
             const SHOOTING_STAR_COUNT = 20;
             
             // --- Data & Constants ---
-            const planetSummaries = {
+            const planetSummaries = { /* ... (Content as in your provided file) ... */ 
                 "Mercury": "The smallest planet in our solar system and closest to the Sun, Mercury is a world of extreme temperatures. It has a heavily cratered surface, resembling Earth's Moon.",
                 "Venus": "Venus is Earth's closest planetary neighbor. Similar in structure and size to Earth, Venus spins slowly in the opposite direction of most planets. Its thick atmosphere traps heat in a runaway greenhouse effect, making it the hottest planet in our solar system.",
                 "Earth": "Our home planet, Earth is the only place we know of so far that’s inhabited by living things. It's also the only planet in our solar system with liquid water on the surface.",
@@ -383,7 +395,7 @@
             
             // --- Initialization ---
             await initializeFirebase(); 
-            fetchDailyCelestialThought(); // Fetch thought after DOM is ready
+            fetchDailyCelestialThought(); 
 
             // --- Event Listeners Setup ---
             enterSolarSystemBtn.addEventListener('click', () => {
@@ -391,14 +403,28 @@
                 solarsystemView.style.display = 'block';
                 loadingIndicator.style.display = 'flex';
                 if (!scene) { 
-                    initThreeJS(); // Creates scene, stars, planets. Calls loadAllStarData() at its end.
+                    initThreeJS(); 
                     animate();
                 } else {
+                    if(controls) controls.enabled = true; // Re-enable controls
                     loadingIndicator.style.display = 'none'; 
                 }
             });
 
-            adminLoginBtn.addEventListener('click', async () => {
+            backToHomepageBtn.addEventListener('click', () => {
+                solarsystemView.style.display = 'none';
+                homepageView.style.display = 'flex';
+                infoPanel.classList.remove('visible'); 
+
+                if (controls) {
+                    controls.reset(); 
+                    controls.enabled = false; // Disable controls when not in solar system view
+                }
+                selectedObject = null; // Clear selected object
+            });
+
+
+            adminLoginBtn.addEventListener('click', async () => { /* ... (Content as in your provided file, relies on onAuthStateChanged) ... */
                 const email = adminEmailInput.value;
                 const password = adminPasswordInput.value;
                 if (!email || !password) {
@@ -407,19 +433,16 @@
                 }
                 try {
                     await signInWithEmailAndPassword(auth, email, password);
-                    // onAuthStateChanged will handle setting isAdmin and UI updates (hiding form, showing controls)
                     showMessage("Admin login successful!");
-                    // adminLoginSection.style.display = 'none'; // Let onAuthStateChanged handle this
                 } catch (error) {
                     console.error("Admin Login Error:", error);
                     showMessage(`Admin Login Failed: ${error.message}`, true);
                 }
             });
 
-            adminLogoutBtn.addEventListener('click', async () => {
+            adminLogoutBtn.addEventListener('click', async () => { /* ... (Content as in your provided file, relies on onAuthStateChanged) ... */
                 try {
                     await signOut(auth);
-                    // onAuthStateChanged will handle UI updates (signing in anonymously, showing login form)
                     showMessage("Admin logged out.");
                 } catch (error) {
                     console.error("Admin Logout Error:", error);
@@ -427,13 +450,13 @@
                 }
             });
             
-            // --- Firebase Initialization ---
+            // --- Firebase Initialization (Using refined version) ---
             async function initializeFirebase() { 
                 try {
                     app = initializeApp(firebaseConfig);
                     db = getFirestore(app);
                     auth = getAuth(app);
-                    // setLogLevel('debug'); // Enable for detailed Firestore logs if needed, but can be verbose
+                    // setLogLevel('debug'); 
                     await setPersistence(auth, browserLocalPersistence); 
 
                     return new Promise((resolve) => {
@@ -448,25 +471,23 @@
                                 } else if (!currentUser.isAnonymous && currentUser.uid !== ADMIN_UID) {
                                     isAdmin = false;
                                     console.log("Non-admin authenticated user signed in:", userId);
-                                    adminLoginSection.style.display = 'none'; // Hide admin login form
+                                    adminLoginSection.style.display = 'none'; 
                                     adminControls.style.display = 'none';
                                 } else { // Anonymous user
                                     isAdmin = false;
-                                    userId = currentUser.uid; // Ensure userId is set for anonymous user
+                                    userId = currentUser.uid; 
                                     console.log("Anonymous user signed in:", userId);
                                     adminLoginSection.style.display = 'block';
                                     adminControls.style.display = 'none';
                                 }
-                            } else { // No user logged in (e.g., after signOut before anonymous sign-in completes)
+                            } else { 
                                 isAdmin = false;
                                 userId = null;
                                 console.log("No user. Attempting anonymous sign-in.");
                                 adminControls.style.display = 'none';
-                                adminLoginSection.style.display = 'block'; // Show login while attempting anonymous
+                                adminLoginSection.style.display = 'block'; 
                                 try {
                                     const { user: anonUser } = await signInAnonymously(auth);
-                                    // onAuthStateChanged will fire again with this anonymous user.
-                                    // userId will be set in that subsequent call.
                                     console.log("Signed in anonymously (callback will follow):", anonUser.uid);
                                 } catch (anonError) {
                                     console.error("Anonymous Sign-In Error:", anonError);
@@ -478,7 +499,7 @@
                             userIdDisplay.textContent = userId || 'Initializing...';
                             userModeDisplay.textContent = isAdmin ? "Admin" : "User";
                             
-                            if (!isAuthReady) { // Resolve the promise only on the first valid auth state
+                            if (!isAuthReady) { 
                                 isAuthReady = true;
                                 resolve(); 
                             }
@@ -491,7 +512,7 @@
                     userId = 'error_user_' + crypto.randomUUID();
                     userIdDisplay.textContent = userId;
                     isAuthReady = true; 
-                    return Promise.resolve(); // Resolve even on error to not block other page loads
+                    return Promise.resolve(); 
                 }
             }
 
@@ -499,13 +520,11 @@
                 if (isAuthReady && isSceneReady && userId && !userId.startsWith('anonymous_error_')) {
                     console.log("Auth and Scene are ready, loading star data.");
                     loadAllStarData();
-                } else {
-                    // console.log("Skipping loadAllStarData. AuthReady:", isAuthReady, "SceneReady:", isSceneReady, "UserID:", userId);
                 }
             }
 
             // --- Texture Creation ---
-            function createTexture(color, detailColor = null, width = 256, height = 256) {
+            function createTexture(color, detailColor = null, width = 256, height = 256) { /* ... (Content as in your provided file) ... */
                 const canvas = document.createElement('canvas');
                 canvas.width = width;
                 canvas.height = height;
@@ -522,7 +541,7 @@
                 }
                 return new THREE.CanvasTexture(canvas);
             }
-             function createAtmosphereTexture() { 
+             function createAtmosphereTexture() { /* ... (Content as in your provided file) ... */ 
                 const canvas = document.createElement('canvas');
                 canvas.width = 128;
                 canvas.height = 128;
@@ -541,19 +560,23 @@
                 scene = new THREE.Scene();
                 scene.background = new THREE.Color(0x000011);
                 camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 20000);
-                camera.position.set(0, 350, 900);
+                camera.position.set(0, 350, 900); // Default camera position
                 renderer = new THREE.WebGLRenderer({ antialias: true });
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 renderer.setPixelRatio(window.devicePixelRatio);
-                canvasContainer.innerHTML = ''; // Clear previous canvas if any (e.g., on error/re-init)
+                canvasContainer.innerHTML = ''; 
                 canvasContainer.appendChild(renderer.domElement);
+                
                 controls = new OrbitControls(camera, renderer.domElement);
                 controls.enableDamping = true;
                 controls.minDistance = 10; 
                 controls.maxDistance = 10000;
-                const ambientLight = new THREE.AmbientLight(0xcccccc, 1.0); // Slightly brighter ambient
+                controls.enabled = true; // Enable controls when solar system is active
+                
+                const ambientLight = new THREE.AmbientLight(0xcccccc, 1.0); 
                 scene.add(ambientLight);
 
+                // Sun (Copied from your file)
                 const sunBaseColor = '#D95F02'; 
                 const sunDetailColor = '#A33B00'; 
                 const sunEmissiveColor = 0xBF4800; 
@@ -565,8 +588,8 @@
                 const sunLight = new THREE.PointLight(0xFFDAB9, 3.5, 15000); 
                 sun.add(sunLight);
 
-                const planetData = [ 
-                    { name: "Mercury", size: 3, color: '#888888', orbitRadius: 120, orbitSpeed: 0.012, moons: [] },
+                const planetData = [ /* ... (Content as in your provided file) ... */ 
+                     { name: "Mercury", size: 3, color: '#888888', orbitRadius: 120, orbitSpeed: 0.012, moons: [] },
                     { name: "Venus", size: 7, color: '#E6E6FA', orbitRadius: 180, orbitSpeed: 0.009, moons: [] },
                     { name: "Earth", size: 7.5, color: '#4A90E2', orbitRadius: 250, orbitSpeed: 0.007, moons: [
                         { name: "Moon", size: 2, color: '#AAAAAA', orbitRadius: 15, orbitSpeed: 0.05 }
@@ -588,9 +611,9 @@
                     { name: "Neptune", size: 14, color: '#3B5998', orbitRadius: 1150, orbitSpeed: 0.0008, moons: [] }
                 ];
 
-                let earthRef = null; // Reference to Earth for atmosphere
+                let earthRef = null; 
 
-                planetData.forEach(pData => {
+                planetData.forEach(pData => { /* ... (Logic from your file to create planets and moons) ... */
                     const planetMaterial = new THREE.MeshStandardMaterial({ color: new THREE.Color(pData.color), roughness: 0.8, metalness: 0.1 });
                     const planet = new THREE.Mesh(new THREE.SphereGeometry(pData.size, 32, 32), planetMaterial);
                     planet.position.x = pData.orbitRadius;
@@ -603,7 +626,7 @@
                         isPlanet: true,
                         summary: planetSummaries[pData.name] || "No summary available."
                     };
-                    sun.add(planet); // Add planet as child of Sun for orbital mechanics
+                    sun.add(planet); 
                     planets.push(planet);
                     if (pData.name === "Earth") earthRef = planet;
 
@@ -611,7 +634,7 @@
                         const ringMaterial = new THREE.MeshStandardMaterial({ color: new THREE.Color(pData.ringColor), side: THREE.DoubleSide, transparent: true, opacity: 0.6, roughness: 0.9 });
                         const saturnRings = new THREE.Mesh(new THREE.RingGeometry(pData.size * 1.2, pData.size * 2.2, 64), ringMaterial);
                         saturnRings.rotation.x = Math.PI / 2.2;
-                        planet.add(saturnRings); // Add rings to Saturn
+                        planet.add(saturnRings); 
                     }
                     pData.moons.forEach(mData => {
                         const moonMaterial = new THREE.MeshStandardMaterial({ color: new THREE.Color(mData.color), roughness: 0.9 });
@@ -624,9 +647,9 @@
                             orbitSpeed: mData.orbitSpeed, 
                             orbitAngle: Math.random() * Math.PI * 2, 
                             isMoon: true, 
-                            parentPlanet: planet // Link back to parent planet
+                            parentPlanet: planet 
                         };
-                        planet.add(moon); // Add moon as child of its planet
+                        planet.add(moon); 
                         moons.push(moon);
                     });
                 });
@@ -643,19 +666,16 @@
 
                 createStars();
                 createShootingStars();
-
-                // Event listeners specific to Three.js view
-                window.addEventListener('resize', onWindowResize, false);
-                canvasContainer.addEventListener('click', onCanvasClick, false);
-                // Other listeners moved to DOMContentLoaded for earlier setup
                 
-                isSceneReady = true; // Signal that scene is ready
-                checkAndLoadStarData(); // Attempt to load star data now that scene is ready
-
-                loadingIndicator.style.display = 'none'; // Hide loading indicator
+                window.addEventListener('resize', onWindowResize, false);
+                // Note: Canvas interaction listeners (pointerdown/up) are set in DOMContentLoaded
+                
+                isSceneReady = true; 
+                checkAndLoadStarData(); 
+                loadingIndicator.style.display = 'none';
             }
             
-            function pseudoRandom(seed) {
+            function pseudoRandom(seed) { /* ... (Content as in your provided file) ... */
                 let state = seed;
                 return function() {
                     state = (1103515245 * state + 12345) % 2147483647;
@@ -663,7 +683,7 @@
                 }
             }
 
-            function createStars() {
+            function createStars() { /* ... (Content as in your provided file, including originalPosition in userData) ... */
                 const starMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
                 const baseStarGeometry = new THREE.SphereGeometry(1, 8, 8); 
                 if (initialStarPositions.length === 0) {
@@ -713,7 +733,7 @@
                 });
             }
             
-            function createShootingStars() {
+            function createShootingStars() { /* ... (Content as in your provided file) ... */
                 const geometry = new THREE.BufferGeometry();
                 const material = new THREE.PointsMaterial({
                     color: 0xffffee, size: 3, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending, sizeAttenuation: true
@@ -727,14 +747,14 @@
                 geometry.setAttribute('position', new THREE.Float32BufferAttribute(shootingStarVertices, 3));
                 shootingStarSystem = new THREE.Points(geometry, material);
                 shootingStarSystem.userData.velocities = [];
-                shootingStarSystem.userData.lifespans = []; // Initialize lifespans array
+                shootingStarSystem.userData.lifespans = []; 
                 for (let i = 0; i < SHOOTING_STAR_COUNT; i++) {
                     resetShootingStar(i);
                 }
                 scene.add(shootingStarSystem);
             }
 
-            function resetShootingStar(index) {
+            function resetShootingStar(index) { /* ... (Content as in your provided file, ensuring lifespans is init) ... */
                 const R = 4000; 
                 const phi = Math.random() * Math.PI * 2;
                 const theta = Math.random() * Math.PI;
@@ -746,10 +766,10 @@
                 shootingStarSystem.userData.velocities[index] = new THREE.Vector3(
                     -x + (Math.random() - 0.5) * R*0.2, -y + (Math.random() - 0.5) * R*0.2, -z + (Math.random() - 0.5) * R*0.2
                 ).normalize().multiplyScalar(speed);
-                shootingStarSystem.userData.lifespans[index] = 50 + Math.random() * 100; // Reset lifespan
+                shootingStarSystem.userData.lifespans[index] = 50 + Math.random() * 100; 
             }
 
-            function updateShootingStars() {
+            function updateShootingStars() { /* ... (Content as in your provided file) ... */
                 if (!shootingStarSystem) return;
                 const positions = shootingStarSystem.geometry.attributes.position;
                 for (let i = 0; i < SHOOTING_STAR_COUNT; i++) {
@@ -768,16 +788,13 @@
             }
 
             // --- Data Handling & Firestore ---
-            async function loadAllStarData() {
+            async function loadAllStarData() { /* ... (Content as in your provided file, uses appIdPath) ... */
                 if (!db || !isAuthReady || !userId || stars.length === 0) { 
-                    // console.log("loadAllStarData: Skipping, prerequisites not met (db, auth, userId, or stars array empty).");
                     return; 
                 }
-                console.log("Loading all star data from Firestore...");
                 for (const star of stars) { 
                     if (!star.userData.isStar) continue;
                     const starId = star.userData.id;
-                    // Note: Using appIdPath which was derived from __app_id or default
                     const starDocRef = doc(db, "artifacts", appIdPath, "public", "data", "stars", starId);
                     try {
                         const docSnap = await getDoc(starDocRef);
@@ -789,7 +806,6 @@
                             star.userData.description = data.description;
                             star.userData.category = data.category || "general"; 
                         } else {
-                            // Set defaults if not in DB
                             star.userData.name = star.userData.id.startsWith("special") ? "Special Star" : "Unnamed Star";
                             star.material.color.set(star.userData.originalColor);
                             star.userData.photoUrls = [];
@@ -799,15 +815,13 @@
                     } catch (error) {
                         console.error(`Error loading data for star ${starId}: ${error.message}`, error); 
                         showMessage(`Error loading star ${starId}. See console.`, true);
-                        // Set error state defaults
                         star.userData.name = star.userData.id.startsWith("special") ? "Special Star (Error)" : "Unnamed Star (Error)";
                         star.material.color.set(star.userData.originalColor);
                     }
                 }
-                console.log("Star data loading complete.");
             }
 
-            function onWindowResize() {
+            function onWindowResize() { /* ... (Content as in your provided file) ... */
                 if (camera && renderer) {
                     camera.aspect = window.innerWidth / window.innerHeight;
                     camera.updateProjectionMatrix();
@@ -815,43 +829,55 @@
                 }
             }
 
-            function onCanvasClick(event) {
-                // Prevent clicks on UI elements from triggering raycasting
-                if (infoPanel.contains(event.target) || searchBarContainer.contains(event.target)) {
-                    return; 
+            // --- Canvas Interaction Handling (Mobile Click Fix) ---
+            let pointerDownTime = 0;
+            let pointerDownPosition = new THREE.Vector2();
+            // These listeners are set up in DOMContentLoaded now
+
+            function handleCanvasTap(event) { 
+                // Check if tap occurred on known UI elements
+                const uiElementsToIgnore = [infoPanel, searchBarContainer, backToHomepageBtn];
+                for (const uiElement of uiElementsToIgnore) {
+                    if (uiElement && uiElement.contains(event.target)) {
+                        // console.log("Tap on UI element, ignoring for canvas selection:", event.target);
+                        return; 
+                    }
                 }
+                // Also, if info panel is visible and the click is anywhere on it (even not specific buttons)
+                if (infoPanel.classList.contains('visible') && infoPanel.contains(event.target)) {
+                     return;
+                }
+
+
+                if (!scene || !camera) return; 
 
                 mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
                 mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
                 raycaster.setFromCamera(mouse, camera);
 
-                // Raycast against stars, planets, and Sun (moons are children and will be caught if 'recursive' is true)
                 const allClickableObjects = [...stars, ...planets, sun];
-                const intersects = raycaster.intersectObjects(allClickableObjects, true); // true for recursive
+                const intersects = raycaster.intersectObjects(allClickableObjects, true); 
 
                 if (intersects.length > 0) {
-                    let intersectedMesh = intersects[0].object;
-                    
-                    // Determine the primary object to select (e.g., planet if a moon is clicked)
-                    if (intersectedMesh.userData && intersectedMesh.userData.isMoon) {
-                        if (intersectedMesh.userData.parentPlanet) {
-                            selectedObject = intersectedMesh.userData.parentPlanet; // Select the parent planet
+                    let rawIntersectedObject = intersects[0].object;
+                    selectedObject = rawIntersectedObject; // Start with the actual mesh hit
+
+                    // Traverse up to parent planet if a moon is clicked (using your original logic)
+                    while (selectedObject.userData && selectedObject.userData.isMoon && selectedObject.parent) {
+                        // Check if parent is one of the main planet objects or the Sun
+                        if (planets.includes(selectedObject.parent) || selectedObject.parent === sun) {
+                             selectedObject = selectedObject.parent;
                         } else {
-                            // This case should ideally not happen if moons are set up correctly
-                            console.warn("Clicked moon has no parentPlanet link:", intersectedMesh.userData.name);
-                            selectedObject = intersectedMesh; // Fallback to selecting the moon itself
+                             // If parent is just another part of a complex moon model, or not a main planet, stop.
+                             // This might happen if moons have multiple meshes. For now, this break is safe.
+                             break;
                         }
-                    } else {
-                        selectedObject = intersectedMesh; // Star, planet, or Sun
                     }
                     
-                    if (!selectedObject) return; // Safety check
-
                     const worldPosition = new THREE.Vector3();
-                    selectedObject.getWorldPosition(worldPosition);
+                    selectedObject.getWorldPosition(worldPosition); // Get world position of the final selectedObject
                     objectCoordsDisplay.textContent = `X: ${worldPosition.x.toFixed(2)}, Y: ${worldPosition.y.toFixed(2)}, Z: ${worldPosition.z.toFixed(2)}`;
 
-                    // Reset panel sections
                     starEditFields.style.display = 'none';
                     starViewFields.style.display = 'none';
                     planetInfoFields.style.display = 'none';
@@ -868,50 +894,30 @@
                             starViewFields.style.display = 'block';
                             populateInfoPanelForStarView(selectedObject);
                         }
-                    } else if (selectedObject.userData.isPlanet || selectedObject === sun) { // Also handles moons that resolved to parent planets
-                        const objectName = selectedObject.userData.name; // Sun also has userData.name
+                    } else if (selectedObject.userData.isPlanet || selectedObject === sun) { 
+                        const objectName = selectedObject.userData.name; 
                         panelTitle.textContent = `${objectName} Information`;
-                        objectIdDisplay.textContent = selectedObject.userData.id; // Sun also has userData.id
+                        objectIdDisplay.textContent = selectedObject.userData.id; 
                         planetInfoFields.style.display = 'block';
                         populateInfoPanelForPlanet(selectedObject);
-                    } else if (selectedObject.userData.isMoon) {
-                        // If we decided to show moon-specific info and had a panel for it
-                        panelTitle.textContent = `${selectedObject.userData.name} (Moon) Information`;
-                        objectIdDisplay.textContent = selectedObject.userData.id;
-                        // Potentially show a simpler panel or message for moons
-                        // For now, this path is less likely if moons default to parent planet selection
-                        console.log("Selected a moon directly:", selectedObject.userData.name);
-                         populateInfoPanelForPlanet(selectedObject); // Or a dedicated moon panel
                     }
                     infoPanel.classList.add('visible');
                 }
             }
             
             // --- Gemini API ---
-            async function callGeminiAPI(promptText) {
-                // CRITICAL SECURITY WARNING: Exposing API keys on the client-side is highly insecure.
-                // This key can be stolen and used by others, potentially incurring costs on your account.
-                // For production, use a backend (e.g., Firebase Cloud Function) to make API calls.
-                const geminiApiKey = "AIzaSyCRu8Re2CX9QBbYBcjLtjJzyhDCzRD8a0k"; // <<< REPLACE AND SECURE THIS KEY!
-
+            async function callGeminiAPI(promptText) { /* ... (Content as in your provided file, with API Key warning) ... */
+                const geminiApiKey = "AIzaSyCRu8Re2CX9QBbYBcjLtjJzyhDCzRD8a0k"; 
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiApiKey}`;
+                
                 if (!geminiApiKey && !(typeof __firebase_config !== 'undefined')) { 
                     const msg = "Gemini API key is missing or not configured for a secure backend call. Features using Gemini will not work without it.";
                     console.error(msg);
                     showMessage(msg, true);
                     return null;
                 }
-                // If you migrate to a backend, this URL will change to your function's endpoint.
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiApiKey}`;
-                
                 const payload = {
                     contents: [{ role: "user", parts: [{ text: promptText }] }]
-                    // Add safetySettings if needed:
-                    // "safetySettings": [
-                    //   { "category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE" },
-                    //   { "category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE" },
-                    //   { "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE" },
-                    //   { "category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE" }
-                    // ]
                 };
                 try {
                     const response = await fetch(apiUrl, {
@@ -921,7 +927,7 @@
                     });
                     if (!response.ok) {
                         const errorData = await response.json();
-                        console.error("Gemini API Error Response:", errorData); // Log the full error
+                        console.error("Gemini API Error Response:", errorData); 
                         let errorMessage = `Gemini API request failed with status ${response.status}`;
                         if (errorData && errorData.error && errorData.error.message) {
                             errorMessage += `: ${errorData.error.message}`;
@@ -934,7 +940,6 @@
                         result.candidates[0].content.parts.length > 0) {
                         return result.candidates[0].content.parts[0].text;
                     } else {
-                         // Check for blocked responses due to safety settings
                         if (result.candidates && result.candidates.length > 0 && result.candidates[0].finishReason === "SAFETY") {
                             console.warn("Gemini response blocked due to safety settings:", result.candidates[0].safetyRatings);
                             throw new Error("Content generation blocked by safety filters. Try a different prompt.");
@@ -949,7 +954,7 @@
                 }
             }
 
-            async function fetchDailyCelestialThought() {
+            async function fetchDailyCelestialThought() { /* ... (Content as in your provided file) ... */
                 const prompt = "Generate a short (1-2 sentences), inspiring or reflective celestial thought about stars, the cosmos, or our place in the universe. Make it hopeful and wondrous.";
                 try {
                     const thought = await callGeminiAPI(prompt);
@@ -963,7 +968,7 @@
                 }
             }
 
-            async function handleWeaveStarStory() {
+            async function handleWeaveStarStory() { /* ... (Content as in your provided file) ... */
                 if (!selectedObject || !selectedObject.userData.isStar) return;
                 const currentStarName = starNameInput.value || "this star";
                 const currentDescription = starDescriptionInput.value;
@@ -994,9 +999,9 @@
                 }
             }
 
-            async function handleAskGeminiAboutPlanet() {
-                if (!selectedObject || (!selectedObject.userData.isPlanet && selectedObject !== sun && !selectedObject.userData.isMoon) ) return;
-                const objectName = selectedObject.userData.name; // Sun, Planets, Moons all have userData.name
+            async function handleAskGeminiAboutPlanet() { /* ... (Content as in your provided file) ... */
+                 if (!selectedObject || (!selectedObject.userData.isPlanet && selectedObject !== sun && !selectedObject.userData.isMoon) ) return;
+                const objectName = selectedObject.userData.name; 
                 const question = geminiPlanetQuestion.value.trim();
                 if (!question) {
                     showMessage("Please type a question about " + objectName, true);
@@ -1027,7 +1032,7 @@
             
             // --- UI Panel Population & Updates ---
             function updateAllStarImagePreviews() {
-                starImagePreviewContainer.innerHTML = ''; // Clear existing previews
+                starImagePreviewContainer.innerHTML = ''; 
                 starPhotoUrlInputs.forEach(input => {
                     const url = input.value.trim();
                     if (url) {
@@ -1035,10 +1040,7 @@
                         img.src = url;
                         img.alt = "Star photo preview";
                         img.onerror = () => { 
-                            // img.style.display = 'none'; // Option 1: Hide broken image links
-                            img.alt = "Invalid image URL"; // Option 2: Show alt text
-                            // Option 3: Show a placeholder for broken link
-                            // img.src = "https://placehold.co/100x50/FF0000/FFFFFF?text=Invalid+URL";
+                            img.alt = "Invalid image URL";
                         };
                         starImagePreviewContainer.appendChild(img);
                     }
@@ -1051,17 +1053,17 @@
                     let data = {}; 
                     if (docSnap.exists()) { 
                         data = docSnap.data(); 
-                    } else { // Defaults if star not yet in DB (e.g. newly created procedural star)
+                    } else { 
                         data.name = star.userData.name || (star.userData.id.startsWith("special") ? "Special Star" : "Unnamed Star");
                         data.category = star.userData.category || "general";
-                        data.color = `#${new THREE.Color(star.userData.originalColor || 0xFFFFFF).getHexString()}`;
+                        data.color = star.userData.color || `#${new THREE.Color(star.userData.originalColor || 0xFFFFFF).getHexString()}`;
                         data.photoUrls = star.userData.photoUrls || [];
                         data.description = star.userData.description || "";
                     }
 
                     starNameInput.value = data.name;
-                    starCategorySelect.value = data.category; 
-                    starColorInput.value = data.color;
+                    starCategorySelect.value = data.category || "general"; 
+                    starColorInput.value = data.color; 
                     
                     const photoUrls = data.photoUrls || [];
                     starPhotoUrlInputs.forEach((input, i) => {
@@ -1073,10 +1075,9 @@
                 }).catch(error => { 
                     console.error(`Error fetching star details for panel (ID: ${star.userData.id}): ${error.message}`, error); 
                     showMessage(`Could not load star details for ${star.userData.id}. Using local data. Error: ${error.message}`, true);
-                    // Fallback to existing userData if Firestore fetch fails
                     starNameInput.value = star.userData.name || (star.userData.id.startsWith("special") ? "Special Star" : "Unnamed Star");
                     starCategorySelect.value = star.userData.category || "general";
-                    starColorInput.value = star.userData.color ? star.userData.color : `#${new THREE.Color(star.userData.originalColor || 0xFFFFFF).getHexString()}`;
+                    starColorInput.value = star.userData.color || `#${new THREE.Color(star.userData.originalColor || 0xFFFFFF).getHexString()}`;
                     const photoUrls = star.userData.photoUrls || [];
                      starPhotoUrlInputs.forEach((input, i) => {
                         input.value = photoUrls[i] || "";
@@ -1086,13 +1087,13 @@
                 });
             }
 
-            function populateInfoPanelForStarView(star) { 
-                const starDocRef = doc(db, "artifacts", appIdPath, "public", "data", "stars", star.userData.id);
+            function populateInfoPanelForStarView(star) { /* ... (Content as in your provided file, uses appIdPath) ... */ 
+                 const starDocRef = doc(db, "artifacts", appIdPath, "public", "data", "stars", star.userData.id);
                 getDoc(starDocRef).then(docSnap => {
                     let data = {}; 
                     if (docSnap.exists()) { 
                         data = docSnap.data(); 
-                    }  else { // Defaults if star not yet in DB
+                    }  else { 
                         data.name = star.userData.name || (star.userData.id.startsWith("special") ? "Special Star" : "Unnamed Star");
                         data.category = star.userData.category || "general";
                         data.photoUrls = star.userData.photoUrls || [];
@@ -1121,7 +1122,7 @@
                         });
                     } else {
                          const img = document.createElement('img');
-                         img.src = "https://placehold.co/300x200/000022/FFFFFF?text=No+Image"; // Placeholder
+                         img.src = "https://placehold.co/300x200/000022/FFFFFF?text=No+Image"; 
                          img.alt = "No image available";
                          viewStarPhotoContainer.appendChild(img);
                     }
@@ -1137,15 +1138,14 @@
                 });
             }
 
-            function populateInfoPanelForPlanet(planetOrMoon) {
-                // Handles Sun, Planets, and Moons (if selected directly)
+            function populateInfoPanelForPlanet(planetOrMoon) { /* ... (Content as in your provided file) ... */
                 const objectName = planetOrMoon.userData.name;
-                let summary = planetOrMoon.userData.summary; // Planets and Sun have this
+                let summary = planetOrMoon.userData.summary; 
 
                 if (planetOrMoon.userData.isMoon) {
                     summary = `A moon orbiting ${planetOrMoon.userData.parentPlanet.userData.name}. ${summary || 'No specific summary for this moon.'}`;
                      panelTitle.textContent = `${objectName} (Moon) Information`;
-                } else { // Sun or Planet
+                } else { 
                      panelTitle.textContent = `${objectName} Information`;
                 }
                 
@@ -1157,14 +1157,14 @@
                 geminiPlanetResponseArea.textContent = "";
             }
 
-
+            // Refined saveSelectedStarData
             async function saveSelectedStarData() {
                 if (!isAdmin || !selectedObject || !selectedObject.userData.isStar || !db || !isAuthReady || !userId) {
                     showMessage("Cannot save: Not admin, no star selected, or services not ready.", true);
                     return;
                 }
-                const star = selectedObject; 
-                const starId = star.userData.id;
+                const starToSave = selectedObject; 
+                const starId = starToSave.userData.id;
                 const photoUrlsToSave = starPhotoUrlInputs.map(input => input.value.trim()).filter(url => url); 
 
                 const dataToSave = {
@@ -1176,36 +1176,49 @@
                     updatedAt: serverTimestamp(),
                     updatedBy: userId
                 };
+                
                 const starDocRef = doc(db, "artifacts", appIdPath, "public", "data", "stars", starId);
+                
                 try {
                     const docSnap = await getDoc(starDocRef);
-                    if (!docSnap.exists()) { // If it's a new star being saved for the first time
-                        const worldPosition = new THREE.Vector3();
-                        star.getWorldPosition(worldPosition); // Get its current (potentially original) position
-                        dataToSave.originalPosition = { x: worldPosition.x, y: worldPosition.y, z: worldPosition.z };
+                    if (!docSnap.exists()) { 
                         dataToSave.createdAt = serverTimestamp();
-                        dataToSave.createdBy = userId; // Track who created it
+                        dataToSave.createdBy = userId;
+                        if (starToSave.userData.originalPosition instanceof THREE.Vector3) {
+                           dataToSave.originalPosition = { 
+                               x: starToSave.userData.originalPosition.x,
+                               y: starToSave.userData.originalPosition.y,
+                               z: starToSave.userData.originalPosition.z
+                           };
+                        } else {
+                            const worldPosition = new THREE.Vector3();
+                            starToSave.getWorldPosition(worldPosition);
+                            dataToSave.originalPosition = { x: worldPosition.x, y: worldPosition.y, z: worldPosition.z };
+                            console.warn(`Star ${starId} did not have a valid userData.originalPosition. Saved current world position.`);
+                        }
                     }
+
                     await setDoc(starDocRef, dataToSave, { merge: true }); 
                     
-                    // Update local star object's userData and appearance
-                    star.userData.name = dataToSave.name;
-                    star.userData.category = dataToSave.category; 
-                    if (star.material && star.material.color) { // Ensure material exists
-                        star.material.color.set(dataToSave.color);
+                    starToSave.userData.name = dataToSave.name;
+                    starToSave.userData.category = dataToSave.category; 
+                    starToSave.userData.color = dataToSave.color; 
+                    starToSave.userData.photoUrls = dataToSave.photoUrls;
+                    starToSave.userData.description = dataToSave.description;
+                    
+                    if (starToSave.material && starToSave.material.color) { 
+                        starToSave.material.color.set(dataToSave.color); 
                     }
-                    star.userData.photoUrls = dataToSave.photoUrls;
-                    star.userData.description = dataToSave.description;
 
                     showMessage(`Star '${dataToSave.name}' saved successfully!`);
                     infoPanel.classList.remove('visible');
                 } catch (error) {
-                    console.error("Error saving star data:", error);
-                    showMessage("Failed to save star data. Please try again.", true);
+                    console.error(`Error saving star data for ID ${starId}:`, error);
+                    showMessage(`Failed to save star data for ${starId}. Error: ${error.message}`, true);
                 }
             }
             
-            function searchStarByUserInput() {
+            function searchStarByUserInput() { /* ... (Content as in your provided file, uses appIdPath) ... */
                 const input = coordSearchInput.value.trim();
                 if (!input) {
                     showMessage("Please enter coordinates, Star ID, or Planet/Moon Name.", true);
@@ -1213,36 +1226,28 @@
                 }
 
                 let foundTarget = null;
-                let targetType = null; // "star", "planet", "moon"
+                let targetType = null; 
 
-                // 1. Try searching by Star ID
                 foundTarget = stars.find(s => s.userData.id.toLowerCase() === input.toLowerCase());
                 if (foundTarget) targetType = "star";
 
-                // 2. If not found by Star ID, try searching by Planet or Sun Name
                 if (!foundTarget) {
                     if (sun.userData.name.toLowerCase() === input.toLowerCase()) {
                         foundTarget = sun;
-                        targetType = "planet"; // Sun is treated like a planet for info panel
+                        targetType = "planet"; 
                     } else {
                         foundTarget = planets.find(p => p.userData.name.toLowerCase() === input.toLowerCase());
                         if (foundTarget) targetType = "planet";
                     }
                 }
 
-                // 3. If not found yet, try searching by Moon Name
                 if (!foundTarget) {
                     foundTarget = moons.find(m => m.userData.name.toLowerCase() === input.toLowerCase());
                     if (foundTarget) {
-                        // If a moon is found by name, we might want to select its parent planet for focus,
-                        // or the moon itself if we have moon-specific views.
-                        // For simplicity in camera focusing, let's focus on the moon itself.
-                        // The onCanvasClick logic will handle if parent planet info should be shown.
                         targetType = "moon"; 
                     }
                 }
                 
-                // 4. If not found by ID or Name, try parsing coordinates (for stars mainly)
                 if (!foundTarget) {
                     const parts = input.split(',').map(part => parseFloat(part.trim()));
                     if (parts.length === 3 && !parts.some(isNaN)) {
@@ -1251,15 +1256,14 @@
                         let minDistanceSq = Infinity;
                         stars.forEach(star => {
                             const starPos = new THREE.Vector3();
-                            star.getWorldPosition(starPos); // Ensure using world position
+                            star.getWorldPosition(starPos); 
                             const distanceSq = starPos.distanceToSquared(searchPos);
                             if (distanceSq < minDistanceSq) {
                                 minDistanceSq = distanceSq;
                                 closestStar = star;
                             }
                         });
-                        // Add a threshold for "closest" to avoid selecting very distant stars
-                        if (closestStar && minDistanceSq < (500*500) ) { // Example threshold: within 500 units
+                        if (closestStar && minDistanceSq < (500*500) ) { 
                             foundTarget = closestStar;
                             targetType = "star";
                         }
@@ -1267,15 +1271,13 @@
                 }
 
                 if (foundTarget) {
-                    // Determine the object to be displayed in the panel (might be parent planet for moons)
+                    let displayObject = foundTarget; // Object whose info panel will be shown
                     if (targetType === "moon" && foundTarget.userData.parentPlanet) {
-                        selectedObject = foundTarget.userData.parentPlanet; // Panel shows parent planet
-                    } else {
-                        selectedObject = foundTarget; // Panel shows the found star/planet/sun
+                        displayObject = foundTarget.userData.parentPlanet; 
                     }
                     
                     const focusTargetPosition = new THREE.Vector3();
-                    foundTarget.getWorldPosition(focusTargetPosition); // Camera focuses on the actual found mesh (star, planet, moon)
+                    foundTarget.getWorldPosition(focusTargetPosition); 
                     
                     controls.target.copy(focusTargetPosition); 
 
@@ -1283,21 +1285,20 @@
                     const targetRadius = foundTarget.geometry.parameters.radius || 1;
                     if (targetType === "star") {
                         offsetDistance = targetRadius * 15 + 70; 
-                    } else { // planet or moon
+                    } else { 
                         offsetDistance = targetRadius * 5 + 100; 
                     }
 
                     let direction = new THREE.Vector3().subVectors(camera.position, focusTargetPosition);
                     if (direction.lengthSq() < 0.0001) { 
-                        direction.set(0, 0.5, 1); // Default direction if camera is at target
+                        direction.set(0, 0.5, 1); 
                     }
                     direction.normalize();
                     
                     const newCameraPosition = new THREE.Vector3().addVectors(focusTargetPosition, direction.multiplyScalar(offsetDistance));
                     camera.position.copy(newCameraPosition);
-                    controls.update(); // Important to apply changes
+                    controls.update(); 
 
-                    // Reset panel sections before populating
                     starEditFields.style.display = 'none';
                     starViewFields.style.display = 'none';
                     planetInfoFields.style.display = 'none';
@@ -1306,30 +1307,29 @@
                     objectCoordsDisplayContainer.style.display = 'block';
                     
                     const displayObjWorldPos = new THREE.Vector3();
-                    selectedObject.getWorldPosition(displayObjWorldPos); // Coords of the object whose info is displayed
+                    displayObject.getWorldPosition(displayObjWorldPos); 
                     objectCoordsDisplay.textContent = `X: ${displayObjWorldPos.x.toFixed(2)}, Y: ${displayObjWorldPos.y.toFixed(2)}, Z: ${displayObjWorldPos.z.toFixed(2)}`;
 
+                    selectedObject = displayObject; // Update global selectedObject for panel
 
-                    if (selectedObject.userData.isStar) {
+                    if (displayObject.userData.isStar) {
                         panelTitle.textContent = "Star Details";
-                        objectIdDisplay.textContent = selectedObject.userData.id;
+                        objectIdDisplay.textContent = displayObject.userData.id;
                         if (isAdmin) {
                             starEditFields.style.display = 'block';
                             saveStarBtn.style.display = 'inline-block';
-                            populateInfoPanelForStarEdit(selectedObject);
+                            populateInfoPanelForStarEdit(displayObject);
                         } else {
                             starViewFields.style.display = 'block';
-                            populateInfoPanelForStarView(selectedObject);
+                            populateInfoPanelForStarView(displayObject);
                         }
-                    } else if (selectedObject.userData.isPlanet || selectedObject === sun) { // Covers planets, sun, and moons that resolved to parent planets
-                        const objectName = selectedObject.userData.name;
+                    } else if (displayObject.userData.isPlanet || displayObject === sun) { 
+                        const objectName = displayObject.userData.name;
                         panelTitle.textContent = `${objectName} Information`;
-                        objectIdDisplay.textContent = selectedObject.userData.id;
+                        objectIdDisplay.textContent = displayObject.userData.id;
                         planetInfoFields.style.display = 'block';
-                        populateInfoPanelForPlanet(selectedObject);
+                        populateInfoPanelForPlanet(displayObject);
                     }
-                    // No specific 'else if (targetType === "moon")' needed here for panel logic
-                    // as 'selectedObject' is already set to parent planet or the moon itself handled by populateInfoPanelForPlanet
                     
                     infoPanel.classList.add('visible');
                     showMessage(`Focusing on: ${foundTarget.userData.name || foundTarget.userData.id}`);
@@ -1338,44 +1338,67 @@
                 }
             }
 
-            function showMessage(message, isError = false) {
+            function showMessage(message, isError = false) { /* ... (Content as in your provided file) ... */
                 messageBox.textContent = message;
                 messageBox.style.backgroundColor = isError ? 'rgba(200, 50, 50, 0.9)' : 'rgba(74, 144, 226, 0.9)';
                 messageBox.classList.add('visible');
                 setTimeout(() => { messageBox.classList.remove('visible'); }, 3000);
             }
             
-            // --- Animation Loop ---
-            function animate() {
+            function animate() { /* ... (Content as in your provided file) ... */
                 requestAnimationFrame(animate);
-                if (controls) controls.update(); // Update orbit controls
+                if (controls && controls.enabled) controls.update(); 
 
-                const time = Date.now() * 0.0001; // Use a time factor for consistent speed
+                const time = Date.now() * 0.0001; 
 
                 planets.forEach(planet => {
-                    // planet.userData.orbitAngle += planet.userData.orbitSpeed; // Original
-                    planet.userData.orbitAngle = time * (planet.userData.orbitSpeed * 100) + (planet.userData.initialOrbitAngle || 0); // Time-based
+                    planet.userData.orbitAngle = time * (planet.userData.orbitSpeed * 100) + (planet.userData.initialOrbitAngle || 0); 
                     planet.position.x = Math.cos(planet.userData.orbitAngle) * planet.userData.orbitRadius;
                     planet.position.z = Math.sin(planet.userData.orbitAngle) * planet.userData.orbitRadius;
-                    planet.rotation.y += 0.002; // Self-rotation
+                    planet.rotation.y += 0.002; 
                 });
                 moons.forEach(moon => {
-                    // moon.userData.orbitAngle += moon.userData.orbitSpeed; // Original
-                    moon.userData.orbitAngle = time * (moon.userData.orbitSpeed * 100) + (moon.userData.initialOrbitAngle || 0); // Time-based
+                    moon.userData.orbitAngle = time * (moon.userData.orbitSpeed * 100) + (moon.userData.initialOrbitAngle || 0); 
                     moon.position.x = Math.cos(moon.userData.orbitAngle) * moon.userData.orbitRadius;
                     moon.position.z = Math.sin(moon.userData.orbitAngle) * moon.userData.orbitRadius;
-                    moon.rotation.y += 0.005; // Self-rotation
+                    moon.rotation.y += 0.005; 
                 });
 
                 updateShootingStars();
                 if (renderer && scene && camera) renderer.render(scene, camera);
             }
 
-            // --- Setup event listeners that are not dependent on Three.js init here ---
+            // Setup canvas interaction listeners in DOMContentLoaded
+            // These variables are already declared globally in this script block.
+            // let pointerDownTime = 0; 
+            // let pointerDownPosition = new THREE.Vector2();
+
+            canvasContainer.addEventListener('pointerdown', (event) => {
+                if (event.isPrimary === false) return; // Ignore multi-touch
+                pointerDownTime = Date.now();
+                pointerDownPosition.set(event.clientX, event.clientY);
+            }, false);
+
+            canvasContainer.addEventListener('pointerup', (event) => {
+                if (event.isPrimary === false) return; // Ignore multi-touch
+
+                const timeThreshold = 250; // ms for a tap
+                const positionThreshold = 10; // pixels for movement tolerance
+
+                const upTime = Date.now();
+                const pressDuration = upTime - pointerDownTime;
+                const moveDistance = pointerDownPosition.distanceTo(new THREE.Vector2(event.clientX, event.clientY));
+
+                if (pressDuration < timeThreshold && moveDistance < positionThreshold) {
+                    handleCanvasTap(event); // Process as a tap
+                }
+            }, false);
+
+            // Setup other general event listeners
             saveStarBtn.addEventListener('click', saveSelectedStarData);
             closePanelBtn.addEventListener('click', () => infoPanel.classList.remove('visible'));
             
-            starPhotoUrlInputs.forEach(input => {
+            starPhotoUrlInputs.forEach(input => { // For image previews
                 input.addEventListener('input', updateAllStarImagePreviews);
             });
 
