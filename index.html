@@ -797,20 +797,28 @@
                 requestAnimationFrame(animate);
                 if (controls && controls.enabled) controls.update(); 
 
-                const time = Date.now() * 0.0001; 
+                const time = Date.now() * 0.0001; // Base time factor
+
+                // Adjust the '20' multiplier lower to slow down orbits further, or higher to speed them up.
+                const orbitalSpeedMultiplier = 20; 
 
                 planets.forEach(planet => {
-                    // Use initialOrbitAngle to ensure consistent starting positions if desired, or remove for continuous motion from random start
-                    planet.userData.orbitAngle = time * (planet.userData.orbitSpeed * 100) + (planet.userData.initialOrbitAngle || planet.userData.orbitAngle || 0); 
-                    planet.position.x = Math.cos(planet.userData.orbitAngle) * planet.userData.orbitRadius;
-                    planet.position.z = Math.sin(planet.userData.orbitAngle) * planet.userData.orbitRadius;
-                    planet.rotation.y += 0.002; 
+                    // The 'planet.userData.orbitAngle' on the right side is the initial random angle set during setup.
+                    // The 'planet.userData.orbitAngle' on the left side is where the new total angle for the current frame is stored.
+                    // This formula calculates the absolute orbital angle based on elapsed time and the initial offset.
+                    const calculatedPlanetAngle = (planet.userData.orbitAngle || 0) + time * (planet.userData.orbitSpeed * orbitalSpeedMultiplier);
+                    
+                    planet.position.x = Math.cos(calculatedPlanetAngle) * planet.userData.orbitRadius;
+                    planet.position.z = Math.sin(calculatedPlanetAngle) * planet.userData.orbitRadius;
+                    planet.rotation.y += 0.002; // Self-rotation speed (per frame)
                 });
+
                 moons.forEach(moon => {
-                    moon.userData.orbitAngle = time * (moon.userData.orbitSpeed * 100) + (moon.userData.initialOrbitAngle || moon.userData.orbitAngle || 0); 
-                    moon.position.x = Math.cos(moon.userData.orbitAngle) * moon.userData.orbitRadius;
-                    moon.position.z = Math.sin(moon.userData.orbitAngle) * moon.userData.orbitRadius;
-                    moon.rotation.y += 0.005; 
+                    const calculatedMoonAngle = (moon.userData.orbitAngle || 0) + time * (moon.userData.orbitSpeed * orbitalSpeedMultiplier);
+
+                    moon.position.x = Math.cos(calculatedMoonAngle) * moon.userData.orbitRadius;
+                    moon.position.z = Math.sin(calculatedMoonAngle) * moon.userData.orbitRadius;
+                    moon.rotation.y += 0.005; // Self-rotation speed (per frame)
                 });
 
                 updateShootingStars();
