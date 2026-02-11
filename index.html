@@ -4,58 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Love You in Lightyears</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        .admin-portal {
-            margin: 20px;
-            padding: 20px;
-            border: 1px solid #ccc;
-            background-color: white;
-        }
-        .back-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .social-links {
-            margin-top: 20px;
-        }
-    </style>
+    <!-- Include necessary Three.js scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to CSS -->
 </head>
 <body>
     <header>
-        <h1>Welcome to Love You in Lightyears</h1>
+        <h1>Welcome to the Universe</h1>
+        <a href="https://www.instagram.com/_joshii007?igsh=MThsbDh0bGNnbmN5YQ==">Instagram</a>
     </header>
-    <main>
-        <section class="admin-portal">
-            <h2>Admin Portal</h2>
-            <form>
-                <label for="password">Enter Password:</label>
-                <input type="password" id="password" name="password" required>
-                <button type="submit">Login</button>
-            </form>
-        </section>
-        <button class="back-button" onclick="window.history.back();">Back</button>
+
+    <main id="solar-system">
+        <div id="3d-solar-system">
+            <!-- Three.js solar system implementation goes here -->
+        </div>
+        <button id="back-button">Back</button>
     </main>
-    <footer class="social-links">
-        <a href="https://www.instagram.com/yourprofile" target="_blank">Follow us on Instagram</a>
-    </footer>
+
+    <section id="admin-portal" style="display:none;">
+        <h2>Admin Portal</h2>
+        <input type="password" id="admin-password" placeholder="Enter password" />
+        <button id="admin-login">Login</button>
+        <div id="star-edit-panel" style="display:none;">
+            <h3>Edit/Add Stars</h3>
+            <!-- Form for editing/adding stars goes here -->
+        </div>
+    </section>
+
+    <script>
+        // Three.js and solar system implementation
+        // Functionality to handle back button
+        document.getElementById('back-button').addEventListener('click', function() {
+            // Logic for back
+        });
+
+        // Admin portal logic
+        document.getElementById('admin-login').addEventListener('click', function() {
+            const password = document.getElementById('admin-password').value;
+            if (password === 'Joshii007.') {
+                document.getElementById('star-edit-panel').style.display = 'block';
+                document.getElementById('admin-portal').style.display = 'none';
+            } else {
+                alert('Incorrect password.');
+            }
+        });
+    </script>
 </body>
 </html>
